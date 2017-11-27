@@ -1,16 +1,18 @@
 
 public class User {
 
-	private String username;
-	private String password;
-	private boolean inSession;
+	protected String username;
+	protected String password;
+	protected boolean inSession;
 	
-	public User() {
-		inSession = false;
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
+		this.inSession = true;
 	}
 	
 	/* LOG IN AND REGISTRATION */
-	public boolean register(String username, String password) {
+	public static boolean register(String username, String password, char userType) {
 		// TODO: Check if user does not exist
 		
 		
@@ -18,23 +20,24 @@ public class User {
 		
 		
 		// Log in to user
-		login(username, password);	// User does not have to log in after registering
+		login(username, password, userType);	// User does not have to log in after registering
 		
 		return false;
 	}
 	
-	public boolean login(String username, String password) {
-		// Check if user exists
+	public static boolean login(String username, String password, char userType) {
+		// TODO: Check if user exists
+		
+		
+		// TODO: Grant access
+		
 		
 		return false;
 	}
 	
 	/* GETTER AND SETTERS */
-	public boolean isInSession() {
-		return inSession;
-	}
-	
-	public void exitSession() {
-		inSession = false;
-	}
+	public boolean isInSession() { return inSession; }
+	public void exitSession() { inSession = false; }
+
+	public String getUsername() { return username; }
 }
