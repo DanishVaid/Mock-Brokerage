@@ -3,7 +3,10 @@ import java.util.Scanner;
 public class CommandUI {
 
 	public static void main(String[] args) {
+		JDBC.setup();
 
+		System.out.exit(0);
+		/* 
 		// Welcome message, select user type.
 		System.out.println("Hello, welcome to program.");
 		System.out.println("Are you a 'manager' or 'trader':");
@@ -91,5 +94,7 @@ public class CommandUI {
 		
 		// End session.
 		input.close();
+
+		*/
 	}
 }
