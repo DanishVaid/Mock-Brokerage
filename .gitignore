@@ -5,3 +5,4 @@ Brokerage/.project
 .vscode/
 .DS_Store
 credentials.json
+*.class
