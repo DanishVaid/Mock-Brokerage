@@ -3,3 +3,5 @@ Brokerage/bin/
 Brokerage/.classpath
 Brokerage/.project
 .vscode/
+.DS_Store
+credentials.json
