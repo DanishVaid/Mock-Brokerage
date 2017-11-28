@@ -43,7 +43,7 @@ public class JDBC {
 	}
 	
 	public static void setCredentials() {
-		String credentialsJSON = getCredentialJSON("././credentials.json");
+		String credentialsJSON = getCredentialJSON("../../credentials.json");
 		
 		try {
 			JSONObject credentials = new JSONObject(credentialsJSON);

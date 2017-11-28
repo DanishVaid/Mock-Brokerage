@@ -3,9 +3,12 @@ import java.util.Scanner;
 public class CommandUI {
 
 	public static void main(String[] args) {
-		JDBC.setup();
-
-		System.out.exit(0);
+		try {
+			JDBC.setup();
+		} catch (Exception e) {
+			//TODO: handle exception
+			System.out.println(e);
+		}
 		/* 
 		// Welcome message, select user type.
 		System.out.println("Hello, welcome to program.");
