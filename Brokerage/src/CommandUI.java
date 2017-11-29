@@ -3,6 +3,8 @@ import java.util.Scanner;
 
 public class CommandUI {
 
+	public static Date currentDate;
+
 	public static void main(String[] args) {		
 		welcome();
 		String userType = getUserType();
