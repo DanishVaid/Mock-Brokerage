@@ -3,7 +3,7 @@ import java.sql.SQLException;
 public class Operator {
 
 	public static void initializeDB() throws SQLException {
-		String[] tables = new String[7];
+		String[] tables = new String[8];
 		tables[0] = "CREATE TABLE customer_profiles ( "
 				+ "name CHAR(30) NOT NULL, "
 				+ "username CHAR(30) NOT NULL, "
@@ -67,6 +67,19 @@ public class Operator {
 				+ "date CHAR(30) NOT NULL "
 				+ ");";
 		
+		tables[7] = "CREATE TABLE managers ("
+				+ "name CHAR(30) NOT NULL, "
+				+ "username CHAR(30) NOT NULL, "
+				+ "password CHAR(30) NOT NULL, "
+				+ "address CHAR(40) NOT NULL, "
+				+ "state CHAR(2) NOT NULL, "
+				+ "phone CHAR(10) NOT NULL, "
+				+ "email CHAR(30) NOT NULL, "
+				+ "tax_id INT UNSIGNED NOT NULL, "
+				+ "ssn CHAR(11) NOT NULL, "
+				+ "PRIMARY KEY(tax_id) "
+				+ ");";
+		
 		// Insert one and only row into system_status.
 		String initSystemStatus = "INSERT INTO system_status "
 				+ "VALUES (0, '3/16/2013') "
@@ -95,7 +108,8 @@ public class Operator {
 			"contracts",
 			"actor_stocks",
 			"system_status",
-			"customer_profiles"
+			"customer_profiles",
+			"managers"
 		};
 
 		for(String table : tables){

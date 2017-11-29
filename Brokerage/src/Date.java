@@ -1,4 +1,4 @@
 public class Date {
     // Get implementation
-    public static boolean placeholder = True;
+    public static boolean placeholder = true;
 }
