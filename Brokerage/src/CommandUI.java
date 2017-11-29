@@ -8,11 +8,12 @@ public class CommandUI {
 	public static void main(String[] args) {		
 		welcome();
 		String userType = getUserType();
-		String[] loginInfo = getLoginInfo();
+
+		String[] loginInfo = (!userType.equals("opeator")) ? getLoginInfo() : null;
 		
 		// Manager commands and actions.
 		if (userType.equals("manager")) {
-			// TODO: Ask question - Is the manager an admin, who can open/close the day, roll forward number of days?
+			// TODO: Ask question - Is the manager an Operator, who can open/close the day, roll forward number of days?
 			String username = attemptSignIn(loginInfo, 'm');
 
 			System.out.println("Logged in as: " + username);
@@ -25,10 +26,10 @@ public class CommandUI {
 			System.out.println("Logged in as: " + username);
 			takeCommandAsTrader();
 		}
-		// Admin commands and actions.
-		else if (userType.equals("admin")) {
-			System.out.println("Logged in as: admin");
-			takeCommandAsAdmin();
+		// Operator commands and actions.
+		else if (userType.equals("operator")) {
+			System.out.println("Logged in as: operator");
+			takeCommandAsOperator();
 		}
 		else {
 			System.out.println("ERROR: Should never enter here.");
@@ -38,16 +39,15 @@ public class CommandUI {
 	private static void welcome() {
 		// Welcome message to user.
 		System.out.println("Hello, welcome to program.");
-		System.out.println("Are you a 'manager' or 'trader':");
+		System.out.println("Are you a 'manager', 'trader', or 'operator':");
 	}
 	
 	private static String getUserType() {
-		// TODO: Add admin user.
-		// Get user type between manager, trader, and admin.
+		// Get user type between manager, trader, and operator.
 		Scanner input = new Scanner(System.in);
 		String userType = input.nextLine().toLowerCase();
 		
-		while ((!userType.equals("manager")) || (!userType.equals("trader"))) {
+		while ((!userType.equals("manager")) || (!userType.equals("trader")) || (!userType.equals("operator"))) {
 			System.out.println("Cannot understand your input, please try again:");
 			userType = input.nextLine().toLowerCase();
 		}
@@ -129,7 +129,7 @@ public class CommandUI {
 		
 	}
 	
-	private static void takeCommandAsAdmin() {
+	private static void takeCommandAsOperator() {
 		
 	}
 
