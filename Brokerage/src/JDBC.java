@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -40,7 +41,11 @@ public class JDBC {
 	}
 	
 	public static void setCredentials() {
-		String credentialsJSON = getCredentialJSON("../../credentials.json");
+		File directory = new File(System.getProperty("user.dir"));
+	    directory = directory.getParentFile();
+	    directory = directory.getParentFile();
+	    File file = new File(directory,"credentials.json");;
+		String credentialsJSON = getCredentialJSON(file);
 		
 		try {
 			JSONObject credentials = new JSONObject(credentialsJSON);
@@ -54,12 +59,12 @@ public class JDBC {
 		}
 	}
 	
-	private static String getCredentialJSON(String filename) {
+	private static String getCredentialJSON(File file) {
 		String JSONContent = "";
 
 		BufferedReader bufferedReader = null;
 		try {
-			bufferedReader = new BufferedReader(new FileReader(filename));
+			bufferedReader = new BufferedReader(new FileReader(file));
 
 			String line = "";
 			while ((line = bufferedReader.readLine()) != null) {
