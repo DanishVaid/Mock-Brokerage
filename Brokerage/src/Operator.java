@@ -5,64 +5,64 @@ public class Operator {
 	public static void initializeDB() throws SQLException {
 		String[] tables = new String[7];
 		tables[0] = "CREATE TABLE customer_profile ( "
-				+ "name CHAR[30] NOT NULL, "
-				+ "username CHAR[30] NOT NULL, "
-				+ "password CHAR[30] NOT NULL, "
-				+ "address CHAR[40] NOT NULL, "
-				+ "state CHAR[2] NOT NULL, "
-				+ "phone CHAR[10] NOT NULL, "
-				+ "email CHAR[30] NOT NULL, "
-				+ "tax_id UNSIGNED INT NOT NULL, "
-				+ "ssn CHAR[11] NOT NULL, "
+				+ "name CHAR(30) NOT NULL, "
+				+ "username CHAR(30) NOT NULL, "
+				+ "password CHAR(30) NOT NULL, "
+				+ "address CHAR(40) NOT NULL, "
+				+ "state CHAR(2) NOT NULL, "
+				+ "phone CHAR(10) NOT NULL, "
+				+ "email CHAR(30) NOT NULL, "
+				+ "tax_id INT UNSIGNED NOT NULL, "
+				+ "ssn CHAR(11) NOT NULL, "
 				+ "PRIMARY KEY(tax_id) "
 				+ ");";
 		tables[1] = "CREATE TABLE market_account ( "
-				+ "tax_id UNSIGNED INT NOT NULL,"
+				+ "tax_id INT UNSIGNED NOT NULL,"
 				+ "balance DECIMAL NOT NULL, "
-				+ "PRIMARY KEY(market_id), "
-				+ "FOREIGN KEY(tax_id) REFERENCES customer_profile "
+				+ "PRIMARY KEY(tax_id), "
+				+ "FOREIGN KEY(tax_id) REFERENCES customer_profile(tax_id) "
 				+ ");";
-		tables[2] = "CREATE TABLE stock_account ( "
-				+ "stock_acc_id INT NOT NULL AUTO INCREMENT, "
-				+ "tax_id UNSIGNED INT NOT NULL, "
-				+ "stock_sym CHAR[3] NOT NULL, "
-				+ "date CHAR[20] NOT NULL, "
-				+ "type CHAR[10] NOT NULL, "
-				+ "price DECIMAL NOT NULL,"
-				+ "PRIMARY KEY(stock_acc_id), "
-				+ "FOREIGN KEY(tax_id) REFERENCES customer_profile, "
-				+ "FOREIGN KEY(stock_sym) REFERENCES actor_stock "	// May not need this foreign key.
-				+ "CHECK(type='buy' OR type='sell') "
-				+ ");";
-		tables[3] = "CREATE TABLE transactions( "
-				+ "txn_id UNSIGNED INT NOT NULL AUTO_INCREMENT, "
-				+ "tax_id UNSIGNED INT NOT NULL, "
+		tables[2] = "CREATE TABLE actor_stock ( "
+				+ "stock_sym CHAR(3) NOT NULL, "
+				+ "current_price DECIMAL NOT NULL, "
+				+ "actor_name CHAR(30) NOT NULL, "
+				+ "dob CHAR(20) NOT NULL, "
+				+ "PRIMARY KEY(stock_sym) "
+				+ ")";
+		tables[3] = "CREATE TABLE transactions ( "
+				+ "txn_id INT UNSIGNED NOT NULL AUTO_INCREMENT, "
+				+ "tax_id INT UNSIGNED NOT NULL, "
 				+ "date CHAR(30) NOT NULL, "
 				+ "txn_type CHAR(30) NOT NULL, "
 				+ "PRIMARY KEY(txn_id), "
-				+ "FOREIGN KEY(tax_id) REFERENCES customer_profile, "
+				+ "FOREIGN KEY(tax_id) REFERENCES customer_profile(tax_id), "
 				+ "CHECK(txn_type='deposit' OR txn_type='withdraw' OR txn_type='buy' OR txn_type='sell' OR txn_type='interest') "
 				+ ");";
-		tables[4] = "CREATE TABLE actor_stock ( "
-				+ "stock_sym CHAR[3] NOT NULL, "
-				+ "current_price DECIMAL NOT NULL, "
-				+ "actor_name CHAR[30] NOT NULL, "
-				+ "dob CHAR[20] NOT NULL, "
-				+ "PRIMARY KEY(stock_sym) "
-				+ ")";
-		tables[5] = "CREATE TABLE contract( "
-				+ "c_id INT unsigned NOT NULL AUTO_INCREMENT, "
+		tables[4] = "CREATE TABLE stock_account ( "
+				+ "stock_acc_id INT UNSIGNED NOT NULL AUTO_INCREMENT, "
+				+ "tax_id INT UNSIGNED NOT NULL, "
+				+ "stock_sym CHAR(3) NOT NULL, "
+				+ "date CHAR(20) NOT NULL, "
+				+ "type CHAR(10) NOT NULL, "
+				+ "price DECIMAL NOT NULL,"
+				+ "PRIMARY KEY(stock_acc_id), "
+				+ "FOREIGN KEY(tax_id) REFERENCES customer_profile(tax_id), "
+				+ "FOREIGN KEY(stock_sym) REFERENCES actor_stock(stock_sym), "	// May not need this foreign key.
+				+ "CHECK(type='buy' OR type='sell') "
+				+ ");";
+		tables[5] = "CREATE TABLE contract ( "
+				+ "c_id INT UNSIGNED NOT NULL AUTO_INCREMENT, "
 				+ "stock_sym CHAR(3) NOT NULL, "
 				+ "movie_title CHAR(30) NOT NULL, "
 				+ "role CHAR(30) NOT NULL, "
 				+ "year INT NOT NULL, "
 				+ "value DOUBLE NOT NULL, "
 				+ "PRIMARY KEY(c_id), "
-				+ "FOREIGN KEY(stock_sym) REFERENCES actor_stock, "
+				+ "FOREIGN KEY(stock_sym) REFERENCES actor_stock(stock_sym), "
 				+ "CHECK(role='actor' OR role='director' OR role='both') "
 				+ ");";
 
-		tables[6] = "CREATE TABLE system_status( "
+		tables[6] = "CREATE TABLE system_status ( "
 				+ "market_open BIT NOT NULL, "
 				+ "date CHAR(30) NOT NULL "
 				+ ");";
@@ -70,12 +70,14 @@ public class Operator {
 		// TODO: insert one and only row into system_status.
 		String initSystemStatus = "INSERT INTO system_status "
 				+ "VALUES (0, '3/16/2013') "
-				+ ");";
+				+ ";";
 		
 		for (int i = 0 ; i < tables.length; i++) {
-			JDBC.statement.executeQuery(tables[i]);
+			JDBC.statement.executeUpdate(tables[i]);
+			System.out.println("Table '" + tables[i].split("\\s+")[2] + "' Created");
 		}
-		JDBC.statement.executeQuery(initSystemStatus);
+		System.out.println("--- All tables created ---");
+		JDBC.statement.executeUpdate(initSystemStatus);
 		
 		System.out.println("Success.");
 	}
