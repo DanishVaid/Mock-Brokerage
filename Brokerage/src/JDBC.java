@@ -27,9 +27,6 @@ public class JDBC {
 		
 		connection = DriverManager.getConnection(host, username, password);
 		statement = connection.createStatement();
-		
-		// TODO: Continue from below
-
 	}
 	
 	public static void endSession() throws SQLException {
