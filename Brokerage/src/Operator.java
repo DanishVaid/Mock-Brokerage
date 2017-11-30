@@ -42,6 +42,7 @@ public class Operator {
 				+ "stock_acc_id INT UNSIGNED NOT NULL AUTO_INCREMENT, "
 				+ "tax_id INT UNSIGNED NOT NULL, "
 				+ "stock_sym CHAR(3) NOT NULL, "
+				+ "num_shares INT UNSIGNED NOT NULL,"
 				+ "date CHAR(20) NOT NULL, "
 				+ "type CHAR(10) NOT NULL, "
 				+ "price DECIMAL NOT NULL,"
