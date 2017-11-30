@@ -1,8 +1,53 @@
 import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Operator {
 
-	public static void initializeDB() throws SQLException {
+	public static boolean canTrade;
+	
+	public static void resetDB() throws SQLException {
+		deleteDB();
+		initializeDB();
+		importInitialData();
+		System.out.println("Success resetting system.");
+	}
+
+	public static void setMarketStatus() throws SQLException, Exception {
+		String query = "SELECT market_open FROM system_status;";
+		ResultSet result = JDBC.statement.executeQuery(query);
+		if(result.first()){
+			canTrade = result.getBoolean("market_open");
+		}
+		else {
+			throw new Exception("No system status found.");
+		}
+	}
+	
+	public static void openMarket() {
+		
+	}
+	
+	public static void closeMarket() {
+		
+	}
+	
+	public static void setStockPrice() {
+		
+	}
+	
+	public static void setDate() {
+		
+	}
+
+	// Private Functions
+
+	private static void initializeDB() throws SQLException {
 		String[] tables = new String[8];
 		tables[0] = "CREATE TABLE customer_profiles ( "
 				+ "name CHAR(30) NOT NULL, "
@@ -10,7 +55,7 @@ public class Operator {
 				+ "password CHAR(30) NOT NULL, "
 				+ "address CHAR(40) NOT NULL, "
 				+ "state CHAR(2) NOT NULL, "
-				+ "phone CHAR(10) NOT NULL, "
+				+ "phone CHAR(15) NOT NULL, "
 				+ "email CHAR(30) NOT NULL, "
 				+ "tax_id INT UNSIGNED NOT NULL, "
 				+ "ssn CHAR(11) NOT NULL, "
@@ -74,7 +119,7 @@ public class Operator {
 				+ "password CHAR(30) NOT NULL, "
 				+ "address CHAR(40) NOT NULL, "
 				+ "state CHAR(2) NOT NULL, "
-				+ "phone CHAR(10) NOT NULL, "
+				+ "phone CHAR(15) NOT NULL, "
 				+ "email CHAR(30) NOT NULL, "
 				+ "tax_id INT UNSIGNED NOT NULL, "
 				+ "ssn CHAR(11) NOT NULL, "
@@ -88,20 +133,13 @@ public class Operator {
 		
 		for (int i = 0 ; i < tables.length; i++) {
 			JDBC.statement.executeUpdate(tables[i]);
-			System.out.println("Table '" + tables[i].split("\\s+")[2] + "' Created");
 		}
 		System.out.println("--- All tables created ---");
 		JDBC.statement.executeUpdate(initSystemStatus);
-		
-		System.out.println("Success intializing system status.");
-	}
-	
-	public static void resetDB() throws SQLException {
-		deleteDB();
-		initializeDB();
+		System.out.println("--- System Status Initialized ---");
 	}
 
-	public static void deleteDB() throws SQLException {
+	private static void deleteDB() throws SQLException {
 		String[] tables = {
 			"market_accounts",
 			"transactions",
@@ -115,26 +153,80 @@ public class Operator {
 
 		for(String table : tables){
 			JDBC.statement.executeUpdate("DROP TABLE " + table + ";");
-			System.out.println("Dropped '" + table + "' table");
 		}
 
 		System.out.println("--- Deleted all table ---");
 	}
-	
-	public static void openMarket() {
+
+	private static void importInitialData() throws SQLException {
+		File directory = new File(System.getProperty("user.dir"));
+	    directory = directory.getParentFile();
+		directory = directory.getParentFile();
 		
+		String[] tablesDatas = {
+			"customer_profiles",
+			"market_accounts",
+			"actor_stocks",
+			"stock_accounts",
+			"contracts",
+			"managers"
+		};
+
+		for(String td : tablesDatas){
+			String file_path = String.format("/sampleData/%s.data", td);
+			File data_file = new File(directory, file_path);
+			populateDataFromFile(data_file, td);
+		}
+
+		System.out.println("--- All Data Imported ---");
 	}
+
+	private static void populateDataFromFile(File data_file, String table_name) throws SQLException {
+
+		BufferedReader dataBufferedReader = null;
+		try {
+			dataBufferedReader = new BufferedReader(new FileReader(data_file));
+
+			// Reads file into array of strings
+			List<String> list = new ArrayList<String>();
+			String temp = null;
+			while((temp = dataBufferedReader.readLine()) != null){
+				list.add(temp);
+			}
+			String[] lines = list.toArray(new String[0]);
+			
+			String baseString = "INSERT INTO " + table_name + " (";
+			String[] attributes = lines[0].split(",");
 	
-	public static void closeMarket() {
-		
-	}
+			baseString += attributes[0];
+			for(int i = 1; i < attributes.length; i++) {
+				baseString += ", " + attributes[i];
+			}
+			baseString += ") VALUES (";
 	
-	public static void setStockPrice() {
-		
-	}
-	
-	public static void setDate() {
-		
+			for(int i = 1; i < lines.length; i++) { 
+				String[] current_row = lines[i].split(",");
+				String values = current_row[0];
+				for(int j = 1; j < current_row.length; j ++) {
+					values += ", " + current_row[j];
+				}
+				String query = baseString + values + ");";
+				
+				JDBC.statement.executeUpdate(query);
+			}
+		}
+		catch (IOException e) {
+			System.out.println("IOException thrown.");
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				dataBufferedReader.close();
+			} 
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }

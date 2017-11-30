@@ -12,6 +12,9 @@ public class CommandUI {
 		
 		try{
 			JDBC.setup();
+			Operator.resetDB();
+			Operator.setMarketStatus();
+			int x = 1 / 0;
 
 			// Manager commands and actions.
 			if (userType.equals("manager")) {
