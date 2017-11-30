@@ -13,7 +13,7 @@ public class Operator {
 	
 	public static void resetDB() throws SQLException {
 		deleteDB();
-		initializeDB();
+		generateTables();
 		importInitialData();
 		System.out.println("Success resetting system.");
 	}
@@ -47,7 +47,7 @@ public class Operator {
 
 	// Private Functions
 
-	private static void initializeDB() throws SQLException {
+	private static void generateTables() throws SQLException {
 		String[] tables = new String[8];
 		tables[0] = "CREATE TABLE customer_profiles ( "
 				+ "name CHAR(30) NOT NULL, "
@@ -126,7 +126,7 @@ public class Operator {
 				+ "PRIMARY KEY(tax_id) "
 				+ ");";
 		
-		// Insert one and only row into system_status.
+		// Insert one and only one row into system_status.
 		String initSystemStatus = "INSERT INTO system_status "
 				+ "VALUES (0, '3/16/2013') "
 				+ ";";
@@ -134,13 +134,14 @@ public class Operator {
 		for (int i = 0 ; i < tables.length; i++) {
 			JDBC.statement.executeUpdate(tables[i]);
 		}
+		
 		System.out.println("--- All tables created ---");
 		JDBC.statement.executeUpdate(initSystemStatus);
 		System.out.println("--- System Status Initialized ---");
 	}
 
 	private static void deleteDB() throws SQLException {
-		String[] tables = {
+		String[] tableNames = {
 			"market_accounts",
 			"transactions",
 			"stock_accounts",
@@ -151,8 +152,8 @@ public class Operator {
 			"managers"
 		};
 
-		for(String table : tables){
-			JDBC.statement.executeUpdate("DROP TABLE " + table + ";");
+		for(String tableName : tableNames){
+			JDBC.statement.executeUpdate("DROP TABLE " + tableName + ";");
 		}
 
 		System.out.println("--- Deleted all table ---");
@@ -163,7 +164,7 @@ public class Operator {
 	    directory = directory.getParentFile();
 		directory = directory.getParentFile();
 		
-		String[] tablesDatas = {
+		String[] tableNames = {
 			"customer_profiles",
 			"market_accounts",
 			"actor_stocks",
@@ -172,30 +173,31 @@ public class Operator {
 			"managers"
 		};
 
-		for(String td : tablesDatas){
-			String file_path = String.format("/sampleData/%s.data", td);
-			File data_file = new File(directory, file_path);
-			populateDataFromFile(data_file, td);
+		for(String tableName : tableNames){
+			String filePath = String.format("/sampleData/%s.data", tableName);
+			File dataFile = new File(directory, filePath);
+			populateDataFromFile(dataFile, tableName);
 		}
 
 		System.out.println("--- All Data Imported ---");
 	}
 
-	private static void populateDataFromFile(File data_file, String table_name) throws SQLException {
+	private static void populateDataFromFile(File dataFile, String tableName) throws SQLException {
 
 		BufferedReader dataBufferedReader = null;
 		try {
-			dataBufferedReader = new BufferedReader(new FileReader(data_file));
+			dataBufferedReader = new BufferedReader(new FileReader(dataFile));
 
-			// Reads file into array of strings
+			// Reads file into array of strings.
 			List<String> list = new ArrayList<String>();
-			String temp = null;
-			while((temp = dataBufferedReader.readLine()) != null){
-				list.add(temp);
+			String line = "";
+			while((line = dataBufferedReader.readLine()) != null){
+				list.add(line);
 			}
 			String[] lines = list.toArray(new String[0]);
 			
-			String baseString = "INSERT INTO " + table_name + " (";
+			// Build query prefix for inserting values.
+			String baseString = "INSERT INTO " + tableName + " (";
 			String[] attributes = lines[0].split(",");
 	
 			baseString += attributes[0];
@@ -204,11 +206,12 @@ public class Operator {
 			}
 			baseString += ") VALUES (";
 	
+			// For each row, build query to insert into DB.
 			for(int i = 1; i < lines.length; i++) { 
-				String[] current_row = lines[i].split(",");
-				String values = current_row[0];
-				for(int j = 1; j < current_row.length; j ++) {
-					values += ", " + current_row[j];
+				String[] currentRow = lines[i].split(",");
+				String values = currentRow[0];
+				for(int j = 1; j < currentRow.length; j ++) {
+					values += ", " + currentRow[j];
 				}
 				String query = baseString + values + ");";
 				
