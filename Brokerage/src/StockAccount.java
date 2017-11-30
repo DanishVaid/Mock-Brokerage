@@ -1,10 +1,5 @@
 
-public class StockAccount extends Account {
-
-	public StockAccount(int uniqueID) {
-		super(uniqueID);
-		// TODO Auto-generated constructor stub
-	}
+public class StockAccount {
 	
 	public void getOwnedShares() {
 		// TODO: SQL Query of all owned shares

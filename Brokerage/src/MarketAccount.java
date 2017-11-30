@@ -1,10 +1,5 @@
 
-public class MarketAccount extends Account {
-
-	public MarketAccount(int uniqueID) {
-		super(uniqueID);
-		// TODO Auto-generated constructor stub
-	}
+public class MarketAccount {
 	
 	public void deposit(double amount) {
 		// TODO: SQL query, update customer balance
