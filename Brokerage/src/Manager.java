@@ -1,12 +1,6 @@
 
 public class Manager extends User {
 
-	
-	
-	public Manager(String username, String password) {
-		super(username, password);
-	}
-
 	/* COMMANDS */
 	public void addInterest() {
 		// TODO: SQL query, add interest to all market accounts

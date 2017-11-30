@@ -44,7 +44,7 @@ public class JDBC {
 		File directory = new File(System.getProperty("user.dir"));
 	    directory = directory.getParentFile();
 	    directory = directory.getParentFile();
-	    File file = new File(directory,"credentials.json");;
+	    File file = new File(directory,"credentials.json");
 		String credentialsJSON = getCredentialJSON(file);
 		
 		try {

@@ -82,7 +82,7 @@ public class CommandUI {
 	}
 	
 	private static int signIn(String[] loginInfo, char userTag) throws SQLException {		
-		// Will not leave loop until valid credentials
+		// Gets taxID from user table by signing in.
 		if (loginInfo.length == 3) {
 			return User.register(loginInfo[0], loginInfo[1], userTag);
 		}

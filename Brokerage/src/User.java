@@ -1,130 +1,24 @@
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class User {
-	
-	/* LOG IN AND REGISTRATION */
+
 	public static int register(String username, String password, char userTag) throws SQLException {
 		if(userTag == 'm') {
-			String query = String.format("SELECT * FROM managers WHERE username = '%s'", username);
-			ResultSet result = JDBC.statement.executeQuery(query);
-			while (result.next()) {
-				System.out.println("Username already exists.");
-				System.out.println("Enter your username and password to register, separated by a space.");
-				String[] loginInfo = CommandUI.input.nextLine().split(" ");
-
-				username = loginInfo[0];
-				password = loginInfo[1];
-
-				query = String.format("SELECT * FROM managers WHERE username = '%s'", username);
-				result = JDBC.statement.executeQuery(query);
-			}
-
-			System.out.println("Name:");
-			String name = CommandUI.input.nextLine();
-			System.out.println("Address:");
-			String address = CommandUI.input.nextLine();
-			System.out.println("State:");
-			String state = CommandUI.input.nextLine();
-			System.out.println("Phone Number:");
-			String phone_num = CommandUI.input.nextLine();
-			System.out.println("Email:");
-			String email = CommandUI.input.nextLine();
-
-			// Verify Tax ID is unique
-			System.out.println("Tax ID:");
-			int tax_id = Integer.parseInt(CommandUI.input.nextLine());
-			query = String.format("SELECT * FROM managers WHERE tax_id = '%d'", tax_id);
-			result = JDBC.statement.executeQuery(query);
-			while(result.next()){
-				System.out.println("ERROR -- Tax ID already in system.");
-				System.out.println("Please Enter Unique Tax ID");
-				tax_id = Integer.parseInt(CommandUI.input.nextLine());
-
-				query = String.format("SELECT * FROM managers WHERE tax_id = '%d'", tax_id);
-				result = JDBC.statement.executeQuery(query);
-			}
-
-			// Verify SSN is unique
-			System.out.println("SSN:");
-			String ssn = CommandUI.input.nextLine();
-			query = String.format("SELECT * FROM managers WHERE ssn = '%s'", ssn);
-			result = JDBC.statement.executeQuery(query);
-			while(result.next()){
-				System.out.println("ERROR -- SSN already in system.");
-				System.out.println("Please Enter Unique SSN");
-				ssn = CommandUI.input.nextLine();
-
-				query = String.format("SELECT * FROM managers WHERE ssn = '%s'", ssn);
-				result = JDBC.statement.executeQuery(query);
-			}
-
-			System.out.println("User information collected, creating account");
-			query = String.format("INSERT INTO managers VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s');", 
-									name, username, password, address, state, phone_num, email, tax_id, ssn);
-			JDBC.statement.executeUpdate(query);
+			String[] updatedLoginInfo = checkUserExists(username, password, "managers");
+			username = updatedLoginInfo[0];
+			password = updatedLoginInfo[1];
+			
+			storeUserInfo(username, password, "managers");
 
 			System.out.println("Manager User Created");
 		}
 		else if(userTag == 't'){
-			String query = String.format("SELECT * FROM customer_profiles WHERE username = '%s'", username);
-			ResultSet result = JDBC.statement.executeQuery(query);
-			while (result.next()) {
-				System.out.println("Username already exists.");
-				System.out.println("Enter your username and password to register, separated by a space.");
-				String[] loginInfo = CommandUI.input.nextLine().split(" ");
-
-				username = loginInfo[0];
-				password = loginInfo[1];
-
-				query = String.format("SELECT * FROM customer_profiles WHERE username = '%s'", username);
-				result = JDBC.statement.executeQuery(query);
-			}
-
-			System.out.println("Name:");
-			String name = CommandUI.input.nextLine();
-			System.out.println("Address:");
-			String address = CommandUI.input.nextLine();
-			System.out.println("State:");
-			String state = CommandUI.input.nextLine();
-			System.out.println("Phone Number:");
-			String phone_num = CommandUI.input.nextLine();
-			System.out.println("Email:");
-			String email = CommandUI.input.nextLine();
-
-			// Verify Tax ID is unique
-			System.out.println("Tax ID:");
-			int tax_id = Integer.parseInt(CommandUI.input.nextLine());
-			query = String.format("SELECT * FROM customer_profiles WHERE tax_id = '%d'", tax_id);
-			result = JDBC.statement.executeQuery(query);
-			while(result.next()){
-				System.out.println("ERROR -- Tax ID already in system.");
-				System.out.println("Please Enter Unique Tax ID");
-				tax_id = Integer.parseInt(CommandUI.input.nextLine());
-
-				query = String.format("SELECT * FROM customer_profiles WHERE tax_id = '%d'", tax_id);
-				result = JDBC.statement.executeQuery(query);
-			}
-
-			// Verify SSN is unique
-			System.out.println("SSN:");
-			String ssn = CommandUI.input.nextLine();
-			query = String.format("SELECT * FROM customer_profiles WHERE ssn = '%s'", ssn);
-			result = JDBC.statement.executeQuery(query);
-			while(result.next()){
-				System.out.println("ERROR -- SSN already in system.");
-				System.out.println("Please Enter Unique SSN");
-				ssn = CommandUI.input.nextLine();
-
-				query = String.format("SELECT * FROM customer_profiles WHERE ssn = '%s'", ssn);
-				result = JDBC.statement.executeQuery(query);
-			}
-
-			System.out.println("User information collected, creating account");
-			query = String.format("INSERT INTO customer_profiles VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s');", 
-									name, username, password, address, state, phone_num, email, tax_id, ssn);
-			JDBC.statement.executeUpdate(query);
+			String[] updatedLoginInfo = checkUserExists(username, password, "customer_profiles");
+			username = updatedLoginInfo[0];
+			password = updatedLoginInfo[1];
+			
+			storeUserInfo(username, password, "customer_profiles");
 
 			System.out.println("Trader User Created");
 		}
@@ -143,37 +37,11 @@ public class User {
 	public static int login(String username, String password, char userTag) throws SQLException {
 		// Check if user exists and get taxID.
 		if(userTag == 'm') {
-			String query = String.format("SELECT * FROM managers WHERE username = '%s' AND password = '%s'", username, password);
-			ResultSet result = JDBC.statement.executeQuery(query);
-			while (!result.next()) {
-				System.out.println("Username and password combination not recognized.");
-				System.out.println("Enter your username and password to log in, separated by a space.");
-				String[] loginInfo = CommandUI.input.nextLine().split(" ");
-
-				username = loginInfo[0];
-				password = loginInfo[1];
-
-				query = String.format("SELECT * FROM managers WHERE username = '%s' AND password = '%s'", username, password);
-				result = JDBC.statement.executeQuery(query);
-			}
-
+			ResultSet result = getUserFromTable(username, password, "managers");	// Table name for managers.
 			return result.getInt("tax_id");
 		}
 		else if(userTag == 't'){
-			String query = String.format("SELECT * FROM customer_profiles WHERE username = '%s' AND password = '%s'", username, password);
-			ResultSet result = JDBC.statement.executeQuery(query);
-			while (!result.next()) {
-				System.out.println("Username and password combination not recognized.");
-				System.out.println("Enter your username and password to log in, separated by a space.");
-				String[] loginInfo = CommandUI.input.nextLine().split(" ");
-
-				username = loginInfo[0];
-				password = loginInfo[1];
-
-				query = String.format("SELECT * FROM customer_profiles WHERE username = '%s' AND password = '%s'", username, password);
-				result = JDBC.statement.executeQuery(query);
-			}
-
+			ResultSet result = getUserFromTable(username, password, "customer_profiles");	// Table name for traders.
 			return result.getInt("tax_id");
 		}
 		else{
@@ -181,5 +49,96 @@ public class User {
 		}
 		
 		return -1;
+	}
+	
+	private static String[] checkUserExists(String username, String password, String tableType) throws SQLException {
+		String query = String.format("SELECT * FROM %s WHERE username = '%s'", tableType, username);
+		ResultSet result = JDBC.statement.executeQuery(query);
+		while (result.next()) {
+			System.out.println("Username already exists.");
+			System.out.println("Enter your username and password to register, separated by a space.");
+			String[] loginInfo = CommandUI.input.nextLine().split(" ");
+
+			username = loginInfo[0];
+			password = loginInfo[1];
+
+			query = String.format("SELECT * FROM %s WHERE username = '%s'", tableType, username);
+			result = JDBC.statement.executeQuery(query);
+		}
+		
+		String[] loginInfo = {username, password};
+		return loginInfo;
+	}
+	
+	private static void storeUserInfo(String username, String password, String tableType) throws SQLException {
+		System.out.println("Name:");
+		String name = CommandUI.input.nextLine();
+		System.out.println("Address:");
+		String address = CommandUI.input.nextLine();
+		System.out.println("State:");
+		String state = CommandUI.input.nextLine();
+		System.out.println("Phone Number:");
+		String phoneNumber = CommandUI.input.nextLine();
+		System.out.println("Email:");
+		String email = CommandUI.input.nextLine();
+
+		String query = "";
+		ResultSet result = null;
+		
+		// Verify Tax ID is unique
+		System.out.println("Tax ID:");
+		int taxID = Integer.parseInt(CommandUI.input.nextLine());
+		query = String.format("SELECT * FROM %s WHERE tax_id = '%d'", tableType, taxID);
+		result = JDBC.statement.executeQuery(query);
+		while(result.next()){
+			System.out.println("ERROR -- Tax ID already in system.");
+			System.out.println("Please Enter Unique Tax ID:");
+			taxID = Integer.parseInt(CommandUI.input.nextLine());
+
+			query = String.format("SELECT * FROM %s WHERE tax_id = '%d'", tableType, taxID);
+			result = JDBC.statement.executeQuery(query);
+		}
+		
+		query = "";
+		result = null;
+
+		// Verify SSN is unique
+		System.out.println("SSN:");
+		String ssn = CommandUI.input.nextLine();
+		query = String.format("SELECT * FROM %s WHERE ssn = '%s'", tableType, ssn);
+		result = JDBC.statement.executeQuery(query);
+		while(result.next()){
+			System.out.println("ERROR -- SSN already in system.");
+			System.out.println("Please Enter Unique SSN");
+			ssn = CommandUI.input.nextLine();
+
+			query = String.format("SELECT * FROM %s WHERE ssn = '%s'", tableType, ssn);
+			result = JDBC.statement.executeQuery(query);
+		}
+		
+		query = "";
+
+		System.out.println("User information collected, creating account...");
+		query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s');", 
+								tableType, name, username, password, address, state, phoneNumber, email, taxID, ssn);
+		JDBC.statement.executeUpdate(query);
+	}
+	
+	private static ResultSet getUserFromTable(String username, String password, String tableType) throws SQLException {
+		String query = String.format("SELECT * FROM %s WHERE username = '%s' AND password = '%s'", tableType, username, password);
+		ResultSet result = JDBC.statement.executeQuery(query);
+		while (!result.next()) {
+			System.out.println("Username and password combination not recognized.");
+			System.out.println("Enter your username and password to log in, separated by a space.");
+			String[] loginInfo = CommandUI.input.nextLine().split(" ");
+
+			username = loginInfo[0];
+			password = loginInfo[1];
+
+			query = String.format("SELECT * FROM %s WHERE username = '%s' AND password = '%s'", tableType, username, password);
+			result = JDBC.statement.executeQuery(query);
+		}
+		
+		return result;
 	}
 }

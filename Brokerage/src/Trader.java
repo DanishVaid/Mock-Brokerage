@@ -1,12 +1,6 @@
 
 public class Trader extends User {
 	
-	
-	
-	public Trader(String username, String password) {
-		super(username, password);
-	}
-	
 	/* COMMANDS */
 	public void deposit() {
 		// TODO: Into market or stock account? Or is there one balance?
