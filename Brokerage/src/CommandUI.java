@@ -23,7 +23,7 @@ public class CommandUI {
 					System.out.println("--- System Error Logging in");
 					throw new Exception();
 				}
-				System.out.println("Logged in successful.");
+				System.out.println("Logged in successfully.");
 				takeCommandAsManager();
 			}
 			// Trader commands and actions.
@@ -32,7 +32,7 @@ public class CommandUI {
 					System.out.println("--- System Error Logging in");
 					throw new Exception();
 				}
-				System.out.println("Logged in successful.");
+				System.out.println("Logged in successfully.");
 				takeCommandAsTrader();
 			}
 			// Operator commands and actions.
@@ -104,7 +104,6 @@ public class CommandUI {
 		return false;
 	}
 	
-	// NOT DONE
 	private static void takeCommandAsManager() throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
@@ -120,71 +119,46 @@ public class CommandUI {
 			String[] command = input.nextLine().toLowerCase().split(" ");
 			String action = command[0];
 			String[] arguments = Arrays.copyOfRange(command, 1, command.length);
-			// TODO: Add commands.
 			
-			if (action.equals("add_interest")) {
-				if (arguments.length == 1) {
-					// Arguments = interestRate
-					// Manager.addInterest(arguments[0]);
+			try {
+				if (action.equals("add_interest")) {
+					double interestRate = Double.parseDouble(arguments[0]);
+					Manager.addInterest(interestRate);
+				}
+				else if (action.equals("monthly_statement")) {
+					int customerTaxID = Integer.parseInt(arguments[0]);
+					Manager.generateMonthlyStatement(customerTaxID);
+				}
+				else if (action.equals("active_customers")) {
+					Manager.listActiveCustomers();
+				}
+				else if (action.equals("dter")) {
+					Manager.generateDTER();
+				}
+				else if (action.equals("customer_report")) {
+					int customerTaxID = Integer.parseInt(arguments[0]);
+					Manager.generateCustomerReport(customerTaxID);
+				}
+				else if (action.equals("delete_transactions")) {
+					Manager.deleteTransactions();
+				}
+				else if (action.equals("exit")) {
+					System.out.println("Goodbye!");
+					break;
 				}
 				else {
-					System.out.println("Invalid number of arguments.");
+					System.out.println("Command not recognized.");
 				}
 			}
-			else if (action.equals("monthly_statement")) {
-				if (arguments.length == 1) {
-					// Arguments = taxID
-					// Manager.generateMonthlyStatement(arguments[0]);
-				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
+			catch (IndexOutOfBoundsException e) {
+				System.out.println("Invalid number of arguments.");
 			}
-			else if (action.equals("active_customers")) {
-				if (arguments.length == 0) {	// TODO: Check if this is a good condition statement, copyOfRange function might return a null, rather than an array of 0 length.
-					// Manager.listActiveCustomers();
-				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
-			}
-			else if (action.equals("dter")) {
-				if (arguments.length == 0) {
-					// Manager.generateDTER();
-				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
-			}
-			else if (action.equals("customer_report")) {
-				if (arguments.length == 1) {
-					// Arguments: taxID
-					// Manager.generateCustomerReport(arguments[0]);
-				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
-			}
-			else if (action.equals("delete_transactions")) {
-				if (arguments.length == 0) {
-					// Manager.deleteTransactions();
-				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
-			}
-			else if (action.equals("exit")) {
-				System.out.println("Goodbye!");
-				break;
-			}
-			else {
-				System.out.println("Command not recognized.");
-				break;
+			catch (NumberFormatException e) {
+				System.out.println("Invalid argument type(s).");
 			}
 		}
 	}
 	
-	// NOT DONE
 	private static void takeCommandAsTrader() throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
@@ -195,7 +169,7 @@ public class CommandUI {
 			System.out.println("Sell:					sell				<number of shares> <stock symbol> <original buy price>");
 			System.out.println("Show Balance:			balance");
 			System.out.println("Transaction history:	transaction_history");
-			System.out.println("Stock Info:				stock_info			<stock symbol>");
+			System.out.println("Stock Price:			stock_price			<stock symbol>");
 			System.out.println("Movie Info:				movie_info			<movie name OR filter (top or reviews)>");
 			System.out.println("Exit System:			exit");
 			
@@ -203,92 +177,57 @@ public class CommandUI {
 			String action = command[0];
 			String[] arguments = Arrays.copyOfRange(command, 1, command.length);
 			
-			if (action.equals("deposit")) {
-				try {
-					// Arguments: taxID, amount
-					MarketAccount.deposit(User.currentTaxID, Double.parseDouble(arguments[0]));
+			try {
+				if (action.equals("deposit")) {
+					double amount = Double.parseDouble(arguments[0]);
+					MarketAccount.deposit(User.currentTaxID, amount);
 				}
-				catch (IllegalArgumentException e) {
-					System.out.println("Invalid argument types. Please try again.");
+				else if (action.equals("withdraw")) {
+					double amount = Double.parseDouble(arguments[0]);
+					Trader.withdraw(User.currentTaxID, amount);
 				}
-				catch (IndexOutOfBoundsException e) {
-					System.out.println("Invalid number of arguments. Please try again.");
+				else if (action.equals("buy")) {
+					double numShares = Double.parseDouble(arguments[0]);
+					String stockSymbol = arguments[1];						// TODO: toUpperCase() or toLowerCase() for all stockSymbol
+					Trader.buy(User.currentTaxID, numShares, stockSymbol);
 				}
-			}
-			else if (action.equals("withdraw")) {
-				if (arguments.length == 1) {
-					// Arguments: taxID, amount
-					// Trader.withdraw(taxID, arguments[0]);
+				else if (action.equals("sell")) {
+					double numShares = Double.parseDouble(arguments[0]);
+					String stockSymbol = arguments[1];
+					double buyPrice = Double.parseDouble(arguments[2]);
+					Trader.sell(User.currentTaxID, numShares, stockSymbol, buyPrice);
 				}
-				else {
-					System.out.println("Invalid number of arguments.");
+				else if (action.equals("balance")) {
+					Trader.showBalance(User.currentTaxID);
 				}
-			}
-			else if (action.equals("buy")) {
-				if (arguments.length == 2) {
-					// Arguments: taxID, numShares, stockSymbol
-					// Trader.buy(taxID, arguments[0], arguments[1]);
+				else if (action.equals("transaction_history")) {
+					Trader.showTransactionHistory(User.currentTaxID);
 				}
-				else {
-					System.out.println("Invalid number of arguments.");
+				else if (action.equals("stock_price")) {
+					String stockSymbol = arguments[0];
+					Trader.showStockPrice(stockSymbol);
 				}
-			}
-			else if (action.equals("sell")) {
-				if (arguments.length == 3) {
-					// Arguments: taxID, numShares, stockSymbol, buyPrice
-					// Trader.sell(taxID, arguments[0], arguments[1], arguments[2]);
+				else if (action.equals("movie_info")) {	// TODO: Refactor arguments.
+					String movieInquiry = arguments[0];
+					Trader.showMovieInfo(movieInquiry);
 				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
-			}
-			else if (action.equals("balance")) {
-				if (arguments.length == 0) {
-					// Arguments: taxID
-					// Trader.balance(taxID);
+				else if (action.equals("exit")) {
+					System.out.println("Goodbye!");
+					break;
 				}
 				else {
-					System.out.println("Invalid number of arguments.");
+					System.out.println("Command not recognized.");
 				}
 			}
-			else if (action.equals("transaction_history")) {
-				if (arguments.length == 0) {
-					// Arguments: taxID
-					// Trader.transactionHistory(taxID);
-				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
+			catch (IndexOutOfBoundsException e) {
+				System.out.println("Invalid number of arguments.");
 			}
-			else if (action.equals("stock_info")) {
-				if (arguments.length == 1) {
-					// Arguments: stockSymbol
-					// Stock.getStockInfo(arguments[0]);
-				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
-			}
-			else if (action.equals("movie_info")) {
-				if (arguments.length == 1) {
-					// Arguments: movieInquiry
-					// Movie.getMovieInfo(arguments[0]);
-				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
-			}
-			else if (action.equals("exit")) {
-				System.out.println("Goodbye!");
-				break;
-			}
-			else {
-				System.out.println("Command not recognized.");
+			catch (NumberFormatException e) {
+				System.out.println("Invalid argument type(s).");
 			}
 		}
 	}
 	
-	// NOT DONE
 	private static void takeCommandAsOperator() {
 		while (true) {
 			System.out.println("What would you like to do?");
@@ -302,50 +241,39 @@ public class CommandUI {
 			String[] command = input.nextLine().toLowerCase().split(" ");
 			String action = command[0];
 			String[] arguments = Arrays.copyOfRange(command, 1, command.length);
-			// TODO: Add commands.
-			
-			if (action.equals("open_market")) {
-				if (arguments.length == 0) {
+
+			try {
+				if (action.equals("open_market")) {
 					Operator.openMarket();
 				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
-			}
-			else if (action.equals("close_market")) {
-				if (arguments.length == 0) {
+				else if (action.equals("close_market")) {
 					Operator.closeMarket();
 				}
-				else {
-					System.out.println("Invalid number of arguments.");
+				else if (action.equals("set_stock_price")) {
+					String stockSymbol = arguments[0];
+					double price = Double.parseDouble(arguments[1]);
+					Operator.setStockPrice(stockSymbol, price);
 				}
-			}
-			else if (action.equals("set_stock_price")) {
-				if (arguments.length == 2) {
-					// Arguments: stockSymbol, price
-					// Operator.setStockPrice(arguments[0], arguments[1]);
+				else if (action.equals("set_date")) {
+					int month = Integer.parseInt(arguments[0]);
+					int day = Integer.parseInt(arguments[1]);
+					int year = Integer.parseInt(arguments[2]);
+					Operator.setDate(month, day, year);
 				}
-				else {
-					System.out.println("Invalid number of arguments.");
-				}
-			}
-			else if (action.equals("set_date")) {
-				if (arguments.length == 3) {
-					// Arguments: month, day, year
-					// Operator.setDate(arguments[0], arguments[1], arguments[2]);
+				else if (action.equals("exit")) {
+					System.out.println("Goodbye!");
+					break;
 				}
 				else {
-					System.out.println("Invalid number of arguments.");
+					System.out.println("Command not recognized.");
 				}
 			}
-			else if (action.equals("exit")) {
-				System.out.println("Goodbye!");
-				break;
+			catch (IndexOutOfBoundsException e) {
+				System.out.println("Invalid number of arguments.");
 			}
-			else {
-				System.out.println("Command not recognized.");
+			catch (NumberFormatException e) {
+				System.out.println("Invalid argument type(s).");
 			}
 		}
 	}
-
 }

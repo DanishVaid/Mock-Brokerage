@@ -29,19 +29,23 @@ public class Operator {
 		}
 	}
 	
+	// TODO: Do.
 	public static void openMarket() {
 		
 	}
 	
+	// TODO: Do.
 	public static void closeMarket() {
 		
 	}
 	
-	public static void setStockPrice() {
-		
+	// TODO: Do.
+	public static void setStockPrice(String stockSymbol, double newPrice) {
+		Stock.setStockPrice(stockSymbol, newPrice);
 	}
 	
-	public static void setDate() {
+	// TODO: Do.
+	public static void setDate(int month, int day, int year) {
 		
 	}
 

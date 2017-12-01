@@ -6,27 +6,25 @@ public class User {
 	public static int currentTaxID;
 
 	public static boolean register(String username, String password, char userTag) throws SQLException {
-		if(userTag == 'm') {
-			String[] updatedLoginInfo = checkUserExists(username, password, "managers");
-			username = updatedLoginInfo[0];
-			password = updatedLoginInfo[1];
-			
-			storeUserInfo(username, password, "managers");
-
-			System.out.println("Manager User Created");
+		String tableName = "";
+		if (userTag == 'm') {
+			tableName = "managers";
 		}
-		else if(userTag == 't'){
-			String[] updatedLoginInfo = checkUserExists(username, password, "customer_profiles");
-			username = updatedLoginInfo[0];
-			password = updatedLoginInfo[1];
-			
-			storeUserInfo(username, password, "customer_profiles");
-
-			System.out.println("Trader User Created");
+		else if (userTag == 't') {
+			tableName = "customer_profiles";
 		}
-		else{
+		else {
 			System.out.println("--- Should never have come here ---");
+			return false;
 		}
+
+		String[] updatedLoginInfo = checkUserExists(username, password, tableName);
+		username = updatedLoginInfo[0];
+		password = updatedLoginInfo[1];
+		
+		storeUserInfo(username, password, tableName);
+
+		System.out.println("User Created.");
 
 		System.out.println("Enter Username and Password seperated by a space to continue logging in.");
 		String[] loginInfo = CommandUI.input.nextLine().split(" ");
@@ -37,23 +35,23 @@ public class User {
 	}
 	
 	public static boolean login(String username, String password, char userTag) throws SQLException {
-		// Check if user exists and get taxID.
-		if(userTag == 'm') {
-			ResultSet result = getUserFromTable(username, password, "managers");	// Table name for managers.
-			currentTaxID = result.getInt("tax_id");
-			return true;
+		String tableName = "";
+		if (userTag == 'm') {
+			tableName = "managers";
 		}
-		else if(userTag == 't'){
-			ResultSet result = getUserFromTable(username, password, "customer_profiles");	// Table name for traders.
-			currentTaxID = result.getInt("tax_id");
-			return true;
-
+		else if (userTag == 't') {
+			tableName = "customer_profiles";
 		}
-		else{
+		else {
 			System.out.println("--- Should never have come here ---");
+			return false;
 		}
-
-		return false;
+		
+		// Check if user exists and get taxID.
+		ResultSet result = getUserFromTable(username, password, tableName);
+		currentTaxID = result.getInt("tax_id");
+		
+		return true;
 	}
 	
 	private static String[] checkUserExists(String username, String password, String tableType) throws SQLException {

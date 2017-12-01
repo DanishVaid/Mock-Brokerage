@@ -1,5 +1,9 @@
+import java.sql.ResultSet;
 
 public class MovieContract {
 	
-	// TODO: SQL query get functions, all should be attributes
+	public static ResultSet getContractInfo() {
+		
+		return null;
+	}
 }

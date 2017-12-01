@@ -1,14 +1,24 @@
+import java.sql.ResultSet;
 
 public class Stock {
 	
-	public void getDailyClosingPrices() {
-		// TODO: SQL query for daily closing prices
-		// May be it's own table of history
+	public static ResultSet getStockInfo() {
 		
+		return null;
+	}
+
+	public static ResultSet getStockInfo(String stockSymbol) {
+		
+		return null;
 	}
 	
-	public void getCurrentPrice() {
-		// TODO: SQL query for current price
+	public static double getStockPrice(String stockSymbol) {
+		
+		return 0;
+	}
+
+	public static void setStockPrice(String query, double newPrice) {
 		
 	}
+
 }

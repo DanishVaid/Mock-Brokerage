@@ -1,17 +1,17 @@
 
 public class StockAccount {
 	
-	public void getOwnedShares() {
+	public static void getOwnedShares() {
 		// TODO: SQL Query of all owned shares
 		
 	}
 	
-	public void buy() {
+	public static void buy() {
 		// TODO: Figure out how to buy
 		
 	}
 	
-	public void sell() {
+	public static void sell() {
 		// TODO: Figure out how to sell
 		
 	}
