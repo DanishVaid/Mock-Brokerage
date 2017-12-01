@@ -13,11 +13,11 @@ public class MarketAccount {
 		System.out.println("New account balance is: " + result.getDouble("balance"));
 	}
 	
-	public void withdraw(double amount) {
-		// TODO: SQL query, update customer balance
+	public static void withdraw(int tax_id, double amount) throws SQLException {
+		String query = String.format("SELECT balance FROM market_accounts WHERE tax_id = %d", tax_id);
 	}
 	
-	public void accrueInterest(double percent) {
+	public static void accrueInterest(double percent) {
 		// TODO: SQL query, update customer balance
 		// Initial thought: manager calls this function when they run add interest
 		// Another possibility: delete this function and the manager updates the SQL tables
@@ -25,16 +25,16 @@ public class MarketAccount {
 		
 	}
 	
-	public void buy(/* Idk what parameters */) {
+	public static void buy(/* Idk what parameters */) {
 		// TODO: Figure out how to buy
 		
 	}
 	
-	public void sell(/* Idk what parameters */) {
+	public static void sell(/* Idk what parameters */) {
 		// TODO: Figure out how to sell
 	}
 
-	public void getBalance() {
+	public static void getBalance() {
 		// TODO: SQL query for balance attribute in table
 		
 	}

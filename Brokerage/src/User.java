@@ -3,7 +3,9 @@ import java.sql.SQLException;
 
 public class User {
 
-	public static int register(String username, String password, char userTag) throws SQLException {
+	public static int currentTaxID;
+
+	public static boolean register(String username, String password, char userTag) throws SQLException {
 		if(userTag == 'm') {
 			String[] updatedLoginInfo = checkUserExists(username, password, "managers");
 			username = updatedLoginInfo[0];
@@ -34,21 +36,24 @@ public class User {
 		return login(username, password, userTag);
 	}
 	
-	public static int login(String username, String password, char userTag) throws SQLException {
+	public static boolean login(String username, String password, char userTag) throws SQLException {
 		// Check if user exists and get taxID.
 		if(userTag == 'm') {
 			ResultSet result = getUserFromTable(username, password, "managers");	// Table name for managers.
-			return result.getInt("tax_id");
+			currentTaxID = result.getInt("tax_id");
+			return true;
 		}
 		else if(userTag == 't'){
 			ResultSet result = getUserFromTable(username, password, "customer_profiles");	// Table name for traders.
-			return result.getInt("tax_id");
+			currentTaxID = result.getInt("tax_id");
+			return true;
+
 		}
 		else{
 			System.out.println("--- Should never have come here ---");
 		}
-		
-		return -1;
+
+		return false;
 	}
 	
 	private static String[] checkUserExists(String username, String password, String tableType) throws SQLException {
