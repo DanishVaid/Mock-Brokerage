@@ -12,9 +12,9 @@ import org.json.JSONObject;
 
 public class JDBC {
 
-	public static String host;
-	public static String username;
-	public static String password;
+	private static String host;
+	private static String username;
+	private static String password;
 	
 	public static Connection connection;
 	public static Statement statement;
@@ -22,8 +22,7 @@ public class JDBC {
 	
 	public static void setup() throws ClassNotFoundException, SQLException {
 		setCredentials();
-		
-		// TODO: What does this do?
+
 		Class.forName("com.mysql.jdbc.Driver");
 		
 		connection = DriverManager.getConnection(host, username, password);

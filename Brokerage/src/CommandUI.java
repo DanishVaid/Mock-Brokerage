@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CommandUI {
@@ -99,21 +100,34 @@ public class CommandUI {
 		return -1;
 	}
 	
+	// NOT DONE
 	private static void takeCommandAsManager() {
 		while (true) {
 			System.out.println("What would you like to do?");
 			System.out.println("---COMMANDS---");
+			System.out.println("Deposit: deposit <amount>");
+			System.out.println("Withdraw: withdraw <amount>");
+			System.out.println("Buy: buy <number of shares> <stock symbol>");
+			System.out.println("Sell: sell <number of shares> <stock symbol> <original buy price>");
+			System.out.println("Show Balance: balance");
+			System.out.println("Transaction history: history");
+			System.out.println("Stock Info: <stock symbol>");
+			System.out.println("Movie Info: <movie name> <filter (top or reviews)>");
 			
-			String[] action = input.nextLine().toLowerCase().split(" ");
+			String[] command = input.nextLine().toLowerCase().split(" ");
+			String action = command[0];
+			String[] arguments = Arrays.copyOfRange(command, 1, command.length);
 			// TODO: Add commands.
 			break;
 		}
 	}
 	
+	// NOT DONE
 	private static void takeCommandAsTrader() {
 		
 	}
 	
+	// NOT DONE
 	private static void takeCommandAsOperator() {
 		
 	}
