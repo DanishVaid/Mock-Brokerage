@@ -15,7 +15,7 @@ public class CommandUI {
 			JDBC.setup();
 			Operator.resetDB();
 			Operator.setMarketStatus();
-			int x = 1 / 0;
+			// int x = 1 / 0;
 
 			// Manager commands and actions.
 			if (userType.equals("manager")) {
@@ -101,7 +101,7 @@ public class CommandUI {
 	}
 	
 	// NOT DONE
-	private static void takeCommandAsManager() {
+	private static void takeCommandAsManager() throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
 			System.out.println("---COMMANDS---");
@@ -121,7 +121,7 @@ public class CommandUI {
 			if (action.equals("add_interest")) {
 				if (arguments.length == 1) {
 					// Arguments = interestRate
-					Manager.addInterest(arguments[0]);
+					// Manager.addInterest(arguments[0]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -130,7 +130,7 @@ public class CommandUI {
 			else if (action.equals("monthly_statement")) {
 				if (arguments.length == 1) {
 					// Arguments = taxID
-					Manager.generateMonthlyStatement(arguments[0]);
+					// Manager.generateMonthlyStatement(arguments[0]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -138,7 +138,7 @@ public class CommandUI {
 			}
 			else if (action.equals("active_customers")) {
 				if (arguments.length == 0) {	// TODO: Check if this is a good condition statement, copyOfRange function might return a null, rather than an array of 0 length.
-					Manager.listActiveCustomers();
+					// Manager.listActiveCustomers();
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -146,7 +146,7 @@ public class CommandUI {
 			}
 			else if (action.equals("dter")) {
 				if (arguments.length == 0) {
-					Manager.generateDTER();
+					// Manager.generateDTER();
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -155,7 +155,7 @@ public class CommandUI {
 			else if (action.equals("customer_report")) {
 				if (arguments.length == 1) {
 					// Arguments: taxID
-					Manager.generateCustomerReport(arguments[0]);
+					// Manager.generateCustomerReport(arguments[0]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -163,7 +163,7 @@ public class CommandUI {
 			}
 			else if (action.equals("delete_transactions")) {
 				if (arguments.length == 0) {
-					Manager.deleteTransactions();
+					// Manager.deleteTransactions();
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -181,7 +181,7 @@ public class CommandUI {
 	}
 	
 	// NOT DONE
-	private static void takeCommandAsTrader(int taxID) {
+	private static void takeCommandAsTrader(int taxID) throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
 			System.out.println("---COMMANDS---");
@@ -202,7 +202,7 @@ public class CommandUI {
 			if (action.equals("deposit")) {
 				try {
 					// Arguments: taxID, amount
-					Trader.deposit(taxID, arguments[0]);
+					MarketAccount.deposit(taxID, Double.parseDouble(arguments[0]));
 				}
 				catch (IllegalArgumentException e) {
 					System.out.println("Invalid argument types. Please try again.");
@@ -214,7 +214,7 @@ public class CommandUI {
 			else if (action.equals("withdraw")) {
 				if (arguments.length == 1) {
 					// Arguments: taxID, amount
-					Trader.withdraw(taxID, arguments[0]);
+					// Trader.withdraw(taxID, arguments[0]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -223,7 +223,7 @@ public class CommandUI {
 			else if (action.equals("buy")) {
 				if (arguments.length == 2) {
 					// Arguments: taxID, numShares, stockSymbol
-					Trader.buy(taxID, arguments[0], arguments[1]);
+					// Trader.buy(taxID, arguments[0], arguments[1]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -232,7 +232,7 @@ public class CommandUI {
 			else if (action.equals("sell")) {
 				if (arguments.length == 3) {
 					// Arguments: taxID, numShares, stockSymbol, buyPrice
-					Trader.sell(taxID, arguments[0], arguments[1], arguments[2]);
+					// Trader.sell(taxID, arguments[0], arguments[1], arguments[2]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -241,7 +241,7 @@ public class CommandUI {
 			else if (action.equals("balance")) {
 				if (arguments.length == 0) {
 					// Arguments: taxID
-					Trader.balance(taxID);
+					// Trader.balance(taxID);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -250,7 +250,7 @@ public class CommandUI {
 			else if (action.equals("transaction_history")) {
 				if (arguments.length == 0) {
 					// Arguments: taxID
-					Trader.transactionHistory(taxID);
+					// Trader.transactionHistory(taxID);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -259,7 +259,7 @@ public class CommandUI {
 			else if (action.equals("stock_info")) {
 				if (arguments.length == 1) {
 					// Arguments: stockSymbol
-					Stock.getStockInfo(arguments[0]);
+					// Stock.getStockInfo(arguments[0]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -268,7 +268,7 @@ public class CommandUI {
 			else if (action.equals("movie_info")) {
 				if (arguments.length == 1) {
 					// Arguments: movieInquiry
-					Movie.getMovieInfo(arguments[0]);
+					// Movie.getMovieInfo(arguments[0]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -319,7 +319,7 @@ public class CommandUI {
 			else if (action.equals("set_stock_price")) {
 				if (arguments.length == 2) {
 					// Arguments: stockSymbol, price
-					Operator.setStockPrice(arguments[0], arguments[1]);
+					// Operator.setStockPrice(arguments[0], arguments[1]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
@@ -328,7 +328,7 @@ public class CommandUI {
 			else if (action.equals("set_date")) {
 				if (arguments.length == 3) {
 					// Arguments: month, day, year
-					Operator.setDate(arguments[0], arguments[1], arguments[2]);
+					// Operator.setDate(arguments[0], arguments[1], arguments[2]);
 				}
 				else {
 					System.out.println("Invalid number of arguments.");
