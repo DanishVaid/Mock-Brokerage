@@ -19,17 +19,21 @@ public class CommandUI {
 
 			// Manager commands and actions.
 			if (userType.equals("manager")) {
-				/*int taxID =*/ signIn(loginInfo, 'm');
-
+				if(!signIn(loginInfo, 'm')){
+					System.out.println("--- System Error Logging in");
+					throw new Exception();
+				}
 				System.out.println("Logged in successful.");
 				takeCommandAsManager();
 			}
 			// Trader commands and actions.
-			else if (userType.equals("trader")) {	
-				int taxID = signIn(loginInfo, 't');
-		
+			else if (userType.equals("trader")) {
+				if(!signIn(loginInfo, 't')){
+					System.out.println("--- System Error Logging in");
+					throw new Exception();
+				}
 				System.out.println("Logged in successful.");
-				takeCommandAsTrader(taxID);
+				takeCommandAsTrader();
 			}
 			// Operator commands and actions.
 			else if (userType.equals("operator")) {
@@ -85,7 +89,7 @@ public class CommandUI {
 		return loginInfo;
 	}
 	
-	private static int signIn(String[] loginInfo, char userTag) throws SQLException {		
+	private static boolean signIn(String[] loginInfo, char userTag) throws SQLException {		
 		// Gets taxID from user table by signing in.
 		if (loginInfo.length == 3) {
 			return User.register(loginInfo[0], loginInfo[1], userTag);
@@ -97,7 +101,7 @@ public class CommandUI {
 			System.out.println("ERROR: Should never enter here.");
 		}
 
-		return -1;
+		return false;
 	}
 	
 	// NOT DONE
@@ -181,7 +185,7 @@ public class CommandUI {
 	}
 	
 	// NOT DONE
-	private static void takeCommandAsTrader(int taxID) throws SQLException {
+	private static void takeCommandAsTrader() throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
 			System.out.println("---COMMANDS---");
@@ -202,7 +206,7 @@ public class CommandUI {
 			if (action.equals("deposit")) {
 				try {
 					// Arguments: taxID, amount
-					MarketAccount.deposit(taxID, Double.parseDouble(arguments[0]));
+					MarketAccount.deposit(User.currentTaxID, Double.parseDouble(arguments[0]));
 				}
 				catch (IllegalArgumentException e) {
 					System.out.println("Invalid argument types. Please try again.");
