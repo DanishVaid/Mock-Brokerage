@@ -1,14 +1,20 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class MarketAccount {
 	
-	public void deposit(double amount) {
-		// TODO: SQL query, update customer balance
-			
+	public static void deposit(int  tax_id, double amount) throws SQLException {
+		String query = String.format("UPDATE market_accounts SET balance = balance + %.4f WHERE tax_id = %d;", amount, tax_id);
+		JDBC.statement.executeUpdate(query);
+		String get_new_amount = String.format("SELECT balance FROM market_accounts WHERE tax_id = %d", tax_id);
+		ResultSet result = JDBC.statement.executeQuery(get_new_amount);
+		result.first();
+		System.out.println("Money (" + amount + ") deposited successfully");
+		System.out.println("New account balance is: " + result.getDouble("balance"));
 	}
 	
 	public void withdraw(double amount) {
 		// TODO: SQL query, update customer balance
-		
 	}
 	
 	public void accrueInterest(double percent) {
