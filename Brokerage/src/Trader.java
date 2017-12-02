@@ -2,18 +2,21 @@ import java.sql.SQLException;
 
 public class Trader extends User {
 	
-	/* COMMANDS */
+	/*** COMMANDS ***/
+	
 	public static void deposit(int taxID, double amount) throws SQLException {
 		MarketAccount.deposit(taxID, amount);
+		
+		System.out.println(String.format("Successfully deposited $%.2f.", amount));
 	}
 	
 	public static void withdraw(int taxID, double amount) throws SQLException {
-		// TODO: From market or stock account? Or is there one balance?
-		// Probably market, stock balance is different, not money but amount of stocks
 		MarketAccount.withdraw(taxID, amount);
+		
+		System.out.println(String.format("Successfully withdrew $%.2f.", amount));
 	}
 	
-	public static void buy(int taxID, double numShares, String stockSymbol) {
+	public static void buy(int taxID, double numShares, String stockSymbol) throws SQLException {
 		double stockPrice = Stock.getStockPrice(stockSymbol);
 		double value = stockPrice * numShares;
 		
@@ -26,20 +29,20 @@ public class Trader extends User {
 		MarketAccount.buy(taxID, value);
 		StockAccount.buy(taxID, numShares, stockSymbol);	// TODO: Is it possible to not be able to buy? Not enough stock on market?
 		
-		System.out.println(String.format("Successful purchase of: %s", stockSymbol));
+		System.out.println(String.format("Successfully purchased of: %s", stockSymbol));
 	}
 	
-	public static void sell(int taxID, double numShares, String stockSymbol, double buyPrice) {
+	public static void sell(int taxID, double numShares, String stockSymbol, double buyPrice) throws SQLException {
 		double stockPrice = Stock.getStockPrice(stockSymbol);
 		double value = stockPrice * numShares;
 		
 		StockAccount.sell(taxID, numShares, stockSymbol, buyPrice);	// TODO: Function can return boolean if possible to sell?
 		MarketAccount.sell(taxID, value);
 		
-		System.out.println(String.format("Successful sell of: %s", stockSymbol));
+		System.out.println(String.format("Successfully sold of: %s", stockSymbol));
 	}
 	
-	public static void showBalance(int taxID) {
+	public static void showBalance(int taxID) throws SQLException {
 		double balance = MarketAccount.getBalance(taxID);
 		
 		System.out.println(String.format("Your current balance is: %f", balance));
@@ -59,27 +62,24 @@ public class Trader extends User {
 	}
 	
 	public static void showMovieInfo(String movieInquiry) {	// TODO: Update parameters
-		String movieInfo = "";
-		if (movieInquiry.equals("top")) {
-			System.out.println("Please enter <begin date> <end date>.");
-			String[] timeInterval = CommandUI.input.nextLine().split(" ");
+		String movieInfo = Movie.getMovieInfo(movieInquiry);
 			
-			movieInfo = Movie.getTopMovies(timeInterval[0], timeInterval[1]);
-			
-			System.out.println("Here are the top movies for the given time interval:");
-		}
-		else if (movieInquiry.equals("reviews")) {
-			movieInfo = Movie.getMovieReviews(movieInquiry);
-			
-			System.out.println("Here are the reviews for the given movie:");
-		}
-		else {
-			movieInfo = Movie.getMovieInfo(movieInquiry);
-			
-			System.out.println("Here is the information for the given movie:");
-		}
-		
+		System.out.println("Here is the information for the given movie:");
 		System.out.println(movieInfo);
+	}
+
+	public static void showTopMovies(int beginYear, int endYear) {
+		String topMovies = Movie.getTopMovies(beginYear, endYear);
+		
+		System.out.println("Here are the top movies for the given time interval:");
+		System.out.println(topMovies);
+	}
+
+	public static void showMovieReviews(String movieName) {
+		String movieReviews = Movie.getMovieReviews(movieName);
+		
+		System.out.println("Here are the reviews of the given movie: ");
+		System.out.println(movieReviews);
 	}
 
 }

@@ -12,7 +12,7 @@ public class Movie {
 		return null;
 	}
 
-	public static String getTopMovies(String timeInterval, String timeInterval2) {
+	public static String getTopMovies(int beginYear, int endYear) {
 		
 		return null;
 	}

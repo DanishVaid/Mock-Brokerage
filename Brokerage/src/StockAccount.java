@@ -1,17 +1,12 @@
 
 public class StockAccount {
 	
-	public static void getOwnedShares() {
-		// TODO: SQL Query of all owned shares
-		
-	}
-	
-	public static void buy() {
+	public static void buy(int taxID, double numShares, String stockSymbol) {
 		// TODO: Figure out how to buy
 		
 	}
 	
-	public static void sell() {
+	public static void sell(int taxID, double numShares, String stockSymbol, double buyPrice) {
 		// TODO: Figure out how to sell
 		
 	}

@@ -54,6 +54,8 @@ public class User {
 		return true;
 	}
 	
+	/*** PRIVATE METHODS ***/
+	
 	private static String[] checkUserExists(String username, String password, String tableType) throws SQLException {
 		String query = String.format("SELECT * FROM %s WHERE username = '%s'", tableType, username);
 		ResultSet result = JDBC.statement.executeQuery(query);

@@ -58,6 +58,8 @@ public class CommandUI {
 		}
 	}
 	
+	/*** PRIVATE METHODS ***/
+	
 	private static String getUserType() {
 		// Welcome message to user.
 		System.out.println("Hello, welcome to program.");
@@ -170,7 +172,9 @@ public class CommandUI {
 			System.out.println("Show Balance:			balance");
 			System.out.println("Transaction history:	transaction_history");
 			System.out.println("Stock Price:			stock_price			<stock symbol>");
-			System.out.println("Movie Info:				movie_info			<movie name OR filter (top or reviews)>");
+			System.out.println("Movie Info:				movie_info			<movie name>");
+			System.out.println("Top Movies:				top_movies			<begin year> <end year>");
+			System.out.println("Movie Reviews:			movie_reviews		<movie name>");	
 			System.out.println("Exit System:			exit");
 			
 			String[] command = input.nextLine().toLowerCase().split(" ");
@@ -188,7 +192,7 @@ public class CommandUI {
 				}
 				else if (action.equals("buy")) {
 					double numShares = Double.parseDouble(arguments[0]);
-					String stockSymbol = arguments[1];						// TODO: toUpperCase() or toLowerCase() for all stockSymbol
+					String stockSymbol = arguments[1].toUpperCase();						// TODO: toUpperCase() or toLowerCase() for all stockSymbol
 					Trader.buy(User.currentTaxID, numShares, stockSymbol);
 				}
 				else if (action.equals("sell")) {
@@ -207,9 +211,18 @@ public class CommandUI {
 					String stockSymbol = arguments[0];
 					Trader.showStockPrice(stockSymbol);
 				}
-				else if (action.equals("movie_info")) {	// TODO: Refactor arguments.
-					String movieInquiry = arguments[0];
-					Trader.showMovieInfo(movieInquiry);
+				else if (action.equals("movie_info")) {
+					String movieName = arguments[0];
+					Trader.showMovieInfo(movieName);
+				}
+				else if (action.equals("top_movies")) {
+					int beginYear = Integer.parseInt(arguments[0]);
+					int endYear = Integer.parseInt(arguments[1]);
+					Trader.showTopMovies(beginYear, endYear);
+				}
+				else if (action.equals("movie_reviews")) {
+					String movieName = arguments[0];
+					Trader.showMovieReviews(movieName);
 				}
 				else if (action.equals("exit")) {
 					System.out.println("Goodbye!");

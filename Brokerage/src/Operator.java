@@ -49,7 +49,7 @@ public class Operator {
 		
 	}
 
-	// Private Functions
+	/*** PRIVATE METHODS ***/
 
 	private static void generateTables() throws SQLException {
 		String[] tables = new String[8];

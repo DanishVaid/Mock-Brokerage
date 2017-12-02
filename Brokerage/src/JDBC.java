@@ -58,6 +58,8 @@ public class JDBC {
 		}
 	}
 	
+	/*** PRIVATE METHODS ***/
+	
 	private static String getCredentialJSON(File file) {
 		String JSONContent = "";
 

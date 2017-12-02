@@ -4,28 +4,27 @@ public class Manager extends User {
 
 	/* COMMANDS */
 	public static void addInterest(double interestRate) throws SQLException {
-		// TODO: SQL query, add interest to all market accounts
-		String query = "";
-		JDBC.statement.executeUpdate(query);
+		MarketAccount.accrueInterestOnAllAccounts(interestRate);
+		
+		System.out.println("Successfully added interest to all market accounts.");
 	}
 	
 	public static void generateMonthlyStatement(int taxID) throws SQLException {
-		// TODO: SQL query, given customer, generate list of all transactions in month
-		// Should include name and email address of the customer
-		// Also include initial and final balance, total earning/loss, total amount of commissions paid
-		String query = "";
-		JDBC.statement.executeQuery(query);
+		String monthlyStatement = Transactions.generateMonthlyStatement(taxID);
+		
+		System.out.println("Monthly report:");
+		System.out.println(monthlyStatement);
 	}
 	
 	public static void listActiveCustomers() throws SQLException {
-		// TODO: SQL query, list all customers who have traded at least 1000 shares in the current month
+		// Get transaction history for the month, group by user, add up shares, print name if count > 1000
 		String query = "";
 		JDBC.statement.executeQuery(query);
 	}
 	
 	// DTER: Government Drug & Tax Evasion Report
 	public static void generateDTER() throws SQLException {
-		// TODO: SQL query, list all customers who have earned more than 10,000 within one month
+		// Get transaction history for the month, group by user, add up earnings, print name if count > 10000
 		// This includes earnings from buying/selling and interest
 		// The residence state of the customer should also be listed
 		String query = "";
