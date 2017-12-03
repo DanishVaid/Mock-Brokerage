@@ -184,28 +184,28 @@ public class CommandUI {
 			try {
 				if (action.equals("deposit")) {
 					double amount = Double.parseDouble(arguments[0]);
-					MarketAccount.deposit(User.currentTaxID, amount);
+					MarketAccount.deposit(amount);
 				}
 				else if (action.equals("withdraw")) {
 					double amount = Double.parseDouble(arguments[0]);
-					Trader.withdraw(User.currentTaxID, amount);
+					Trader.withdraw(amount);
 				}
 				else if (action.equals("buy")) {
 					double numShares = Double.parseDouble(arguments[0]);
 					String stockSymbol = arguments[1].toUpperCase();
-					Trader.buy(User.currentTaxID, numShares, stockSymbol);
+					Trader.buy(numShares, stockSymbol);
 				}
 				else if (action.equals("sell")) {
 					double numShares = Double.parseDouble(arguments[0]);
 					String stockSymbol = arguments[1];
 					double buyPrice = Double.parseDouble(arguments[2]);
-					Trader.sell(User.currentTaxID, numShares, stockSymbol, buyPrice);
+					Trader.sell(numShares, stockSymbol, buyPrice);
 				}
 				else if (action.equals("balance")) {
-					Trader.showBalance(User.currentTaxID);
+					Trader.showBalance();
 				}
 				else if (action.equals("transaction_history")) {
-					Trader.showTransactionHistory(User.currentTaxID);
+					Trader.showTransactionHistory();
 				}
 				else if (action.equals("stock_price")) {
 					String stockSymbol = arguments[0];

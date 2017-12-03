@@ -3,7 +3,7 @@ import java.sql.SQLException;
 
 public class Stock {
 	
-	public static ResultSet getStockInfo() {
+	public static ResultSet getAllStockInfo() {
 		
 		return null;
 	}

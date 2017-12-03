@@ -1,9 +1,21 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Transactions {
 
-	public static String getTransactionHistory(int taxID) {
-		// TODO Auto-generated method stub
-		return null;
+	public static String getTransactionHistory(int taxID) throws SQLException {
+		String transactionHistory = "";
+		
+		String query = String.format("SELECT * FROM transactions WHERE tax_id = %d", taxID);
+		ResultSet result = JDBC.statement.executeQuery(query);
+		
+		while (result.next()) {
+			// TODO: Get attributes.
+			
+			// TOOD: Store attributes into transactionHistory string.
+			
+		}
+		return transactionHistory;
 	}
 
 	public static String generateMonthlyStatement(int taxID) {

@@ -128,6 +128,8 @@ public class User {
 		query = String.format("INSERT INTO %s VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s');", 
 								tableType, name, username, password, address, state, phoneNumber, email, taxID, ssn);
 		JDBC.statement.executeUpdate(query);
+		
+		MarketAccount.createAccount();
 	}
 	
 	private static ResultSet getUserFromTable(String username, String password, String tableType) throws SQLException {
