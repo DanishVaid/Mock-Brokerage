@@ -1,5 +1,3 @@
-package ProgAssignment4;
-
 import java.util.ArrayList;
 
 public class Date {
@@ -18,8 +16,8 @@ public class Date {
 		this(0, 0, 0);
 	}
 	
-	public Date(int year, int month, int day) {
-		setDate(year, month, day);
+	public Date(int month, int day, int year) {
+		setDate(month, day, year);
 		
 		monthsEndIn28.add(2);
 		
@@ -37,7 +35,7 @@ public class Date {
 		monthsEndIn31.add(12);
 	}
 	
-	public void setDate(int year, int month, int day) {
+	public void setDate(int month, int day, int year) {
 		this.year = year;
 		this.month = month;
 		this.day = day;
@@ -115,11 +113,16 @@ public class Date {
 	}
 	
 	public String getDateString() {
-		return "" + year + "/" + month + "/" + day;
+		return "" + month + "/" + day + "/" + year;
+	}
+
+	public Date buildFromString(String inp) {
+		String[] date_data = inp.split("/");
+		return new Date(Integer.parseInt(date_data[0]), Integer.parseInt(date_data[1]), Integer.parseInt(date_data[2]));
 	}
 	
 	public int[] getDateInt() {
-		return new int[] {year, month, day};
+		return new int[] {month, day, year};
 	}
 	
 	public int getYear() {

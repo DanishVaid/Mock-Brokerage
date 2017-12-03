@@ -2,25 +2,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MarketAccount {
+
+	public static void createAccount(int tax_id) throws SQLException {
+		String query = String.format("INSERT INTO market_accounts (tax_id, balance) VALUES (%d, %d);", tax_id, 1000);
+		JDBC.statement.executeUpdate(query);
+		System.out.println(String.format("Successfully created account for tax ID: %d, initial balance 1000", getBalance()));
+	}
 	
-	public static void deposit(int taxID, double amount) throws SQLException {
-		String query = String.format("UPDATE market_accounts SET balance = balance + %.2f WHERE tax_id = %d;", amount, taxID);
+	public static void deposit(double amount) throws SQLException {
+		String query = String.format("UPDATE market_accounts SET balance = balance + %.2f WHERE tax_id = %d;", amount, User.currentTaxID);
 		JDBC.statement.executeUpdate(query);
 		
-		double newBalance = getBalance(taxID);
+		double newBalance = getBalance();
 		System.out.println("New account balance is: " + newBalance);
 	}
 	
-	public static void withdraw(int taxID, double amount) throws SQLException {
-		double originalBalance = getBalance(taxID);
+	public static void withdraw(double amount) throws SQLException {
+		double originalBalance = getBalance();
 		
 		if (originalBalance > amount) {
 			double newBalance = originalBalance - amount;
 			
-			String query = String.format("UPATE market_account SET balance = %.2f WHERE tax_id = %d", newBalance, taxID);
+			String query = String.format("UPATE market_account SET balance = %.2f WHERE tax_id = %d", newBalance, User.currentTaxID);
 			JDBC.statement.executeUpdate(query);
 			
-			newBalance = getBalance(taxID);
+			newBalance = getBalance();
 			System.out.println(String.format("New balance is: %.2f", newBalance));
 		}
 		else {
@@ -34,12 +40,20 @@ public class MarketAccount {
 	
 	}
 	
-	public static void buy(int taxID, double amount) throws SQLException {
-		withdraw(taxID, amount);
+	public static void buy(double amount) throws SQLException {
+		withdraw(amount);
 	}
 	
-	public static void sell(int taxID, double amount) throws SQLException {
-		deposit(taxID, amount);
+	public static void sell(double amount) throws SQLException {
+		deposit(amount);
+	}
+
+	public static double getBalance() throws SQLException {
+		String query = String.format("SELECT balance FROM market_accounts WHERE tax_id = %d", User.currentTaxID);
+		
+		ResultSet result = JDBC.statement.executeQuery(query);
+		result.first();
+		return result.getDouble("balance");
 	}
 
 	public static double getBalance(int taxID) throws SQLException {
