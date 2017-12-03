@@ -19,27 +19,24 @@ public class Trader extends User {
 	public static void buy(double numShares, String stockSymbol) throws SQLException {
 		double stockPrice = Stock.getStockPrice(stockSymbol);
 		double value = stockPrice * numShares;
-		
-		double currentBalance = MarketAccount.getBalance();
-		if (currentBalance <= value) {
-			System.out.println("You do not have enough money to make this transaction.");
+
+		if (MarketAccount.buy(value)){
+			StockAccount.buy(numShares, stockSymbol);	// TODO: Is it possible to not be able to buy? Not enough stock on market?
+			System.out.println(String.format("Successfully purchased %d %s shares for $%.2f.", numShares, stockSymbol, value));
 			return;
 		}
-
-		MarketAccount.buy(value);
-		StockAccount.buy(numShares, stockSymbol);	// TODO: Is it possible to not be able to buy? Not enough stock on market?
-		
-		System.out.println(String.format("Successfully purchased of: %s", stockSymbol));
+		System.out.println(String.format("Failure to purchase %d shares of %s.", numShares, stockSymbol));
 	}
 	
 	public static void sell(double numShares, String stockSymbol, double buyPrice) throws SQLException {
 		double stockPrice = Stock.getStockPrice(stockSymbol);
 		double value = stockPrice * numShares;
 		
-		StockAccount.sell(numShares, stockSymbol, buyPrice);	// TODO: Function can return boolean if possible to sell?
-		MarketAccount.sell(value);
-		
-		System.out.println(String.format("Successfully sold of: %s", stockSymbol));
+		if(StockAccount.sell(numShares, stockSymbol, buyPrice)) {	// TODO: Function can return boolean if possible to sell?
+			MarketAccount.sell(value);
+			System.out.println(String.format("Successfully sold %d %s shares for $%.2f.", numShares, stockSymbol, value));
+		}
+		System.out.println(String.format("Failure to purchase %d shares of %s.", numShares, stockSymbol));
 	}
 	
 	public static void showBalance() throws SQLException {

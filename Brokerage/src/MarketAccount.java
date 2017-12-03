@@ -9,15 +9,16 @@ public class MarketAccount {
 		System.out.println(String.format("Successfully created account for tax ID: %d, initial balance 1000", getBalance()));
 	}
 	
-	public static void deposit(double amount) throws SQLException {
+	public static boolean deposit(double amount) throws SQLException {
 		String query = String.format("UPDATE market_accounts SET balance = balance + %.2f WHERE tax_id = %d;", amount, User.currentTaxID);
 		JDBC.statement.executeUpdate(query);
 		
 		double newBalance = getBalance();
 		System.out.println("New account balance is: " + newBalance);
+		return true;
 	}
 	
-	public static void withdraw(double amount) throws SQLException {
+	public static boolean withdraw(double amount) throws SQLException {
 		double originalBalance = getBalance();
 		
 		if (originalBalance > amount) {
@@ -28,9 +29,11 @@ public class MarketAccount {
 			
 			newBalance = getBalance();
 			System.out.println(String.format("New balance is: %.2f", newBalance));
+			return true;
 		}
 		else {
 			System.out.println(String.format("Insufficient funds, account currently has: %.2f", originalBalance));
+			return false;
 		}
 	}
 	
@@ -40,12 +43,12 @@ public class MarketAccount {
 	
 	}
 	
-	public static void buy(double amount) throws SQLException {
-		withdraw(amount);
+	public static boolean buy(double amount) throws SQLException {
+		return withdraw(amount);
 	}
 	
-	public static void sell(double amount) throws SQLException {
-		deposit(amount);
+	public static boolean sell(double amount) throws SQLException {
+		return deposit(amount);
 	}
 
 	public static double getBalance() throws SQLException {
