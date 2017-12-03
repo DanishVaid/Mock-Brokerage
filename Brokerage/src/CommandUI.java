@@ -7,7 +7,7 @@ public class CommandUI {
 	public static Date currentDate;
 	public static Scanner input = new Scanner(System.in);
 
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
 		String userType = getUserType();
 		String[] loginInfo = (!userType.equals("operator")) ? getLoginInfo() : null;
 		
@@ -110,13 +110,13 @@ public class CommandUI {
 		while (true) {
 			System.out.println("What would you like to do?");
 			System.out.println("---COMMANDS---");
-			System.out.println("Add Interest:				add_interest 		<interest rate>");
-			System.out.println("Generate Monthly Statement:	monthly_statement	<customer taxID>");
-			System.out.println("List Active Customers:		active_customers");
-			System.out.println("Generate DTER:				dter");
-			System.out.println("Customer Report:			customer_report 	<customer taxID>");
-			System.out.println("Delete Transactions:		delete_transactions");
-			System.out.println("Exit System:				exit");
+			System.out.println(String.format("%-28s %-20s %s", "Add Interest:", "add_interest", "<interest rate>"));
+			System.out.println(String.format("%-28s %-20s %s", "Generate Monthly Statement:", "monthly_statement", "<customer taxID>"));
+			System.out.println(String.format("%-28s %-20s", "List Active Customers:", "active_customers"));
+			System.out.println(String.format("%-28s %-20s", "Generate DTER:", "dter"));
+			System.out.println(String.format("%-28s %-20s %s", "Customer Report:", "customer_report", "<customer taxID>"));
+			System.out.println(String.format("%-28s %-20s", "Delete Transactions", "delete_transactions"));
+			System.out.println(String.format("%-28s %-20s", "Exit System:", "exit"));
 			
 			String[] command = input.nextLine().toLowerCase().split(" ");
 			String action = command[0];
@@ -160,22 +160,22 @@ public class CommandUI {
 			}
 		}
 	}
-	
+
 	private static void takeCommandAsTrader() throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
 			System.out.println("---COMMANDS---");
-			System.out.println("Deposit:				deposit				<amount>");
-			System.out.println("Withdraw:				withdraw			<amount>");
-			System.out.println("Buy:					buy					<number of shares> <stock symbol>");
-			System.out.println("Sell:					sell				<number of shares> <stock symbol> <original buy price>");
-			System.out.println("Show Balance:			balance");
-			System.out.println("Transaction history:	transaction_history");
-			System.out.println("Stock Price:			stock_price			<stock symbol>");
-			System.out.println("Movie Info:				movie_info			<movie name>");
-			System.out.println("Top Movies:				top_movies			<begin year> <end year>");
-			System.out.println("Movie Reviews:			movie_reviews		<movie name>");	
-			System.out.println("Exit System:			exit");
+			System.out.println(String.format("%-28s %-20s %s", "Deposit:", "deposit", "<amount>"));
+			System.out.println(String.format("%-28s %-20s %s", "Withdraw:", "withdraw", "<amount>"));
+			System.out.println(String.format("%-28s %-20s %s", "Buy:", "buy", "<number of shares> <stock symbol>"));
+			System.out.println(String.format("%-28s %-20s %s", "Sell:", "sell", "<number of shares> <stock symbol>"));
+			System.out.println(String.format("%-28s %-20s", "Show Balance:", "balance"));
+			System.out.println(String.format("%-28s %-20s", "Transaction History:", "transaction_history"));
+			System.out.println(String.format("%-28s %-20s %s", "Stock Price:", "stock_price", "<stock symbol>"));
+			System.out.println(String.format("%-28s %-20s %s", "Movie Info:", "movie_info", "<movie name>"));
+			System.out.println(String.format("%-28s %-20s %s", "Top Movies:", "top_movies", "<begin year> <end year>"));
+			System.out.println(String.format("%-28s %-20s %s", "Movie Reviews:", "movie_reviews", "<movie name>"));
+			System.out.println(String.format("%-28s %-20s", "Exit System:", "exit"));
 			
 			String[] command = input.nextLine().toLowerCase().split(" ");
 			String action = command[0];
@@ -245,11 +245,11 @@ public class CommandUI {
 		while (true) {
 			System.out.println("What would you like to do?");
 			System.out.println("---COMMANDS---");
-			System.out.println("Open Market:		open_market");
-			System.out.println("Close Market:		close_market");
-			System.out.println("Set Stock Price:	set_stock_price	<stock symbol> <price>");
-			System.out.println("Set Date:			set_date		<month> <day> <year>");
-			System.out.println("Exit System:		exit");
+			System.out.println(String.format("%-28s %-20s", "Open Market:", "open_market"));
+			System.out.println(String.format("%-28s %-20s", "Close Market:", "close_market"));
+			System.out.println(String.format("%-28s %-20s %s", "Set Stock Price:", "set_stock_price", "<stock symbol> <price>"));
+			System.out.println(String.format("%-28s %-20s %s", "Set Date:", "set_date", "<month> <day> <year>"));
+			System.out.println(String.format("%-28s %-20s", "Exit System:", "exit"));
 			
 			String[] command = input.nextLine().toLowerCase().split(" ");
 			String action = command[0];
