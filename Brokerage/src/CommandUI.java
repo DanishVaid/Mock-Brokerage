@@ -184,7 +184,7 @@ public class CommandUI {
 			try {
 				if (action.equals("deposit")) {
 					double amount = Double.parseDouble(arguments[0]);
-					MarketAccount.deposit(amount);
+					Trader.deposit(amount);
 				}
 				else if (action.equals("withdraw")) {
 					double amount = Double.parseDouble(arguments[0]);
