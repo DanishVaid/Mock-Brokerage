@@ -1,38 +1,42 @@
-import com.sun.xml.internal.bind.v2.model.annotation.Quick;
+import java.sql.ResultSet;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
 
 public class StockAccount {
 	
-	public static boolean buy(double numShares, String stockSymbol, double stock_price) {
+	public static boolean buy(double numShares, String stockSymbol) throws SQLException{
 		// TODO: Figure out how to buy
 		String insert_part = "INSERT INTO stock_accounts (tax_id, stock_sym, num_shares, date, type, price)";
-		String values_part = String.format("VALUES (%d, %s, %.3f, '12/2/2017', 'buy', %.2f)", User.currentTaxID, stockSymbol, numShares, CommandUI.currentDate, stock_price);
+		String values_part = String.format("VALUES (%d, '%s', %.3f, '%s', 'buy', %.2f)", User.currentTaxID, stockSymbol, numShares, CommandUI.currentDate.toString(), Stock.getStockPrice(stockSymbol));
 
 		String query = insert_part + " " + values_part + ";";
 		JDBC.statement.executeUpdate(query);
 		return true;
 	}
 	
-	public static boolean sell(double numShares, String stockSymbol) {
+	public static boolean sell(double numShares, String stockSymbol, double buyPrice) throws SQLException{
 		// TODO: Figure out how to sell
-		String query = String.format("SELECT SUM(num_shares) FROM stock_accounts WHERE tax_id = %d AND stock_sym = %s;", User.currentTaxID, stockSymbol);
-		ResultSet result = JDBC.statement.executeUpdate(query);
+		String query = String.format("SELECT SUM(num_shares) FROM stock_accounts WHERE tax_id = %d AND stock_sym = '%s' AND price = %.2f;", User.currentTaxID, stockSymbol, buyPrice);
+		ResultSet result = JDBC.statement.executeQuery(query);
 
 		if(result.next()){
 			if(result.getDouble(1) >= numShares){
-				String insert_part = "INSERT INTO stock_accounts (tax_id, stock_sym, num_shares, date, type, price)";
-				String values_part = String.format("VALUES (%d, %s, %.3f, '12/2/2017', 'buy', %.2f)", User.currentTaxID, stockSymbol, (-1 * numShares), CommandUI.currentDate, Stock.getStockPrice(stockSymbol));
+				double current_price = Stock.getStockPrice(stockSymbol);
+				double earnings = (current_price - buyPrice) * numShares;
+				String insert_part = "INSERT INTO stock_accounts (tax_id, stock_sym, num_shares, date, type, price, earnings)";
+				String values_part = String.format("VALUES (%d, '%s', %.3f, '%s', 'sell', %.2f, %.2f)", User.currentTaxID, stockSymbol, (-1 * numShares), CommandUI.currentDate, current_price, earnings);
 		
 				query = insert_part + " " + values_part + ";";
 				JDBC.statement.executeUpdate(query);
 				return true;
 			}
 			else {
-				System.out.println(String.format("You do not own enough shares of %s, aborting sale.", stockSymbol));
+				System.out.println(String.format("You do not own enough shares of '%s' at price: $%.2, aborting sale.", stockSymbol, buyPrice));
 			}
 		}
 		else {
 			// Do not own stocks
-			System.out.println(String.format("You do not own any shares of %s, sale not possible", stockSymbol));
+			System.out.println(String.format("You do not own any shares of '%s' at price: $%.2, sale not possible", stockSymbol, buyPrice));
 		}
 
 		return false;

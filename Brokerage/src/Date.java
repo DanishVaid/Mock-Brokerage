@@ -112,11 +112,11 @@ public class Date {
 		return false;
 	}
 	
-	public String getDateString() {
+	public String toString() {
 		return "" + month + "/" + day + "/" + year;
 	}
 
-	public Date buildFromString(String inp) {
+	public static Date buildFromString(String inp) {
 		String[] date_data = inp.split("/");
 		return new Date(Integer.parseInt(date_data[0]), Integer.parseInt(date_data[1]), Integer.parseInt(date_data[2]));
 	}

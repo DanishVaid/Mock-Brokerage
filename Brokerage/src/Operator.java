@@ -18,11 +18,13 @@ public class Operator {
 		System.out.println("Success resetting system.");
 	}
 
-	public static void setMarketStatus() throws SQLException, Exception {
-		String query = "SELECT market_open FROM system_status;";
+	public static void setSystem() throws SQLException, Exception {
+		String query = "SELECT * FROM system_status;";
 		ResultSet result = JDBC.statement.executeQuery(query);
 		if(result.first()){
 			canTrade = result.getBoolean("market_open");
+			CommandUI.currentDate = Date.buildFromString(result.getString("date"));
+			System.out.println("System Initialized");
 		}
 		else {
 			throw new Exception("No system status found.");
@@ -96,6 +98,7 @@ public class Operator {
 				+ "date CHAR(20) NOT NULL, "
 				+ "type CHAR(10) NOT NULL, "
 				+ "price DECIMAL(10, 2) NOT NULL,"
+				+ "earnings DECIMAL(10, 2),"
 				+ "PRIMARY KEY(stock_acc_id), "
 				+ "FOREIGN KEY(tax_id) REFERENCES customer_profiles(tax_id), "
 				+ "FOREIGN KEY(stock_sym) REFERENCES actor_stocks(stock_sym), "	// May not need this foreign key.

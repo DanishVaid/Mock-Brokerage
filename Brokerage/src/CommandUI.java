@@ -14,7 +14,7 @@ public class CommandUI {
 		try{
 			JDBC.setup();
 			Operator.resetDB();
-			Operator.setMarketStatus();
+			Operator.setSystem();
 			// int x = 1 / 0;
 
 			// Manager commands and actions.
@@ -197,7 +197,7 @@ public class CommandUI {
 				}
 				else if (action.equals("sell")) {
 					double numShares = Double.parseDouble(arguments[0]);
-					String stockSymbol = arguments[1];
+					String stockSymbol = arguments[1].toUpperCase();
 					double buyPrice = Double.parseDouble(arguments[2]);
 					Trader.sell(numShares, stockSymbol, buyPrice);
 				}
@@ -241,7 +241,7 @@ public class CommandUI {
 		}
 	}
 	
-	private static void takeCommandAsOperator() {
+	private static void takeCommandAsOperator() throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
 			System.out.println("---COMMANDS---");

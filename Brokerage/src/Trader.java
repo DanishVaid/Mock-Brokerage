@@ -17,26 +17,43 @@ public class Trader extends User {
 	}
 	
 	public static void buy(double numShares, String stockSymbol) throws SQLException {
-		double stockPrice = Stock.getStockPrice(stockSymbol);
-		double value = stockPrice * numShares;
-
-		if (MarketAccount.buy(value)){
-			StockAccount.buy(numShares, stockSymbol);
-			System.out.println(String.format("Successfully purchased %d %s shares for $%.2f.", numShares, stockSymbol, value));
+		double stockPrice;
+		try {
+			stockPrice = Stock.getStockPrice(stockSymbol);
+		}
+		catch(IllegalArgumentException e) {
+			System.out.println("Stock Symbol not recognized");
 			return;
 		}
-		System.out.println(String.format("Failure to purchase %d shares of %s.", numShares, stockSymbol));
+
+		double value = stockPrice * numShares;
+		
+		if (MarketAccount.buy(value)){
+			StockAccount.buy(numShares, stockSymbol);
+			System.out.println(String.format("Successfully purchased %.3f '%s' shares for $%.2f.", numShares, stockSymbol, value));
+			return;
+		}
+		System.out.println(String.format("Failure to purchase %d shares of '%s'.", numShares, stockSymbol));
 	}
 	
 	public static void sell(double numShares, String stockSymbol, double buyPrice) throws SQLException {
-		double stockPrice = Stock.getStockPrice(stockSymbol);
+		double stockPrice;
+		try {
+			stockPrice = Stock.getStockPrice(stockSymbol);
+		}
+		catch(IllegalArgumentException e) {
+			System.out.println("Stock Symbol not recognized");
+			return;
+		}
+
 		double value = stockPrice * numShares;
 		
-		if(StockAccount.sell(numShares, stockSymbol)) {
+		if(StockAccount.sell(numShares, stockSymbol, buyPrice)) {
 			MarketAccount.sell(value);
-			System.out.println(String.format("Successfully sold %d %s shares for $%.2f.", numShares, stockSymbol, value));
+			System.out.println(String.format("Successfully sold %.3f '%s' shares for $%.2f.", numShares, stockSymbol, value));
+			return;
 		}
-		System.out.println(String.format("Failure to purchase %d shares of %s.", numShares, stockSymbol));
+		System.out.println(String.format("Failure to sell %.3f shares of '%s' bought at %.2f.", numShares, stockSymbol, buyPrice));
 	}
 	
 	public static void showBalance() throws SQLException {
@@ -77,6 +94,10 @@ public class Trader extends User {
 		
 		System.out.println("Here are the reviews of the given movie: ");
 		System.out.println(movieReviews);
+	}
+
+	public static void showOwningStocks() throws SQLException {
+		// TO DO if desired: show net stocks owned
 	}
 
 }

@@ -13,13 +13,15 @@ public class Stock {
 		return null;
 	}
 	
-	public static double getStockPrice(String stockSymbol) throws SQLException {
-		String query = String.format("SELECT price FROM stocks WHERE stock_symbol = %s", stockSymbol);
+	public static double getStockPrice(String stockSymbol) throws SQLException, IllegalArgumentException {
+		String query = String.format("SELECT current_price FROM actor_stocks WHERE stock_sym = '%s'", stockSymbol);
 		
 		ResultSet result = JDBC.statement.executeQuery(query);
-		result.first();
-		
-		return result.getInt("price");
+		if(result.next()){
+			return result.getInt("current_price");
+		}
+
+		throw new IllegalArgumentException();
 	}
 
 	public static void setStockPrice(String stockSymbol, double newPrice) throws SQLException {

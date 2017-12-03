@@ -24,7 +24,7 @@ public class MarketAccount {
 		if (originalBalance > amount) {
 			double newBalance = originalBalance - amount;
 			
-			String query = String.format("UPATE market_account SET balance = %.2f WHERE tax_id = %d", newBalance, User.currentTaxID);
+			String query = String.format("UPDATE market_accounts SET balance = %.2f WHERE tax_id = %d;", newBalance, User.currentTaxID);
 			JDBC.statement.executeUpdate(query);
 			
 			newBalance = getBalance();
@@ -52,7 +52,7 @@ public class MarketAccount {
 	}
 
 	public static double getBalance() throws SQLException {
-		String query = String.format("SELECT balance FROM market_accounts WHERE tax_id = %d", User.currentTaxID);
+		String query = String.format("SELECT balance FROM market_accounts WHERE tax_id = %d;", User.currentTaxID);
 		
 		ResultSet result = JDBC.statement.executeQuery(query);
 		result.first();
@@ -60,7 +60,7 @@ public class MarketAccount {
 	}
 
 	public static double getBalance(int taxID) throws SQLException {
-		String query = String.format("SELECT balance FROM market_accounts WHERE tax_id = %d", taxID);
+		String query = String.format("SELECT balance FROM market_accounts WHERE tax_id = %d;", taxID);
 		
 		ResultSet result = JDBC.statement.executeQuery(query);
 		result.first();
