@@ -22,8 +22,9 @@ public class Stock {
 		return result.getInt("price");
 	}
 
-	public static void setStockPrice(String query, double newPrice) {
+	public static void setStockPrice(String stockSymbol, double newPrice) throws SQLException {
+		String query = String.format("UPDATE ...", stockSymbol, newPrice);	// TODO: Finish query.
 		
+		JDBC.statement.executeUpdate(query);
 	}
-
 }

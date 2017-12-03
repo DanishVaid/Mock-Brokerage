@@ -3,10 +3,10 @@ import java.sql.SQLException;
 
 public class Transactions {
 
-	public static String getTransactionHistory(int taxID) throws SQLException {
+	public static String getTransactionHistory() throws SQLException {
 		String transactionHistory = "";
 		
-		String query = String.format("SELECT * FROM transactions WHERE tax_id = %d", taxID);
+		String query = String.format("SELECT * FROM transactions WHERE tax_id = %d", User.currentTaxID);
 		ResultSet result = JDBC.statement.executeQuery(query);
 		
 		while (result.next()) {

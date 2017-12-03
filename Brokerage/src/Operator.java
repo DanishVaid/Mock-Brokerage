@@ -39,9 +39,10 @@ public class Operator {
 		
 	}
 	
-	// TODO: Do.
-	public static void setStockPrice(String stockSymbol, double newPrice) {
+	public static void setStockPrice(String stockSymbol, double newPrice) throws SQLException {
 		Stock.setStockPrice(stockSymbol, newPrice);
+		
+		System.out.println(String.format("Successfully set price of %s to $%d", stockSymbol, newPrice));
 	}
 	
 	// TODO: Do.

@@ -21,7 +21,7 @@ public class Trader extends User {
 		double value = stockPrice * numShares;
 
 		if (MarketAccount.buy(value)){
-			StockAccount.buy(numShares, stockSymbol);	// TODO: Is it possible to not be able to buy? Not enough stock on market?
+			StockAccount.buy(numShares, stockSymbol);
 			System.out.println(String.format("Successfully purchased %d %s shares for $%.2f.", numShares, stockSymbol, value));
 			return;
 		}
@@ -32,7 +32,7 @@ public class Trader extends User {
 		double stockPrice = Stock.getStockPrice(stockSymbol);
 		double value = stockPrice * numShares;
 		
-		if(StockAccount.sell(numShares, stockSymbol, buyPrice)) {	// TODO: Function can return boolean if possible to sell?
+		if(StockAccount.sell(numShares, stockSymbol)) {
 			MarketAccount.sell(value);
 			System.out.println(String.format("Successfully sold %d %s shares for $%.2f.", numShares, stockSymbol, value));
 		}

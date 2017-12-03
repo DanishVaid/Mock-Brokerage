@@ -1,3 +1,4 @@
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Manager extends User {
@@ -19,7 +20,7 @@ public class Manager extends User {
 	public static void listActiveCustomers() throws SQLException {
 		// Get transaction history for the month, group by user, add up shares, print name if count > 1000
 		String query = "";
-		JDBC.statement.executeQuery(query);
+		ResultSet result = JDBC.statement.executeQuery(query);
 	}
 	
 	// DTER: Government Drug & Tax Evasion Report
@@ -28,14 +29,14 @@ public class Manager extends User {
 		// This includes earnings from buying/selling and interest
 		// The residence state of the customer should also be listed
 		String query = "";
-		JDBC.statement.executeQuery(query);
+		ResultSet result = JDBC.statement.executeQuery(query);
 	}
 	
 	public static void generateCustomerReport(int customerTaxID) throws SQLException {
 		// TODO: SQL query, generate a list of all accounts associated with a customer
 		// Include the current balance
 		String query = "";
-		JDBC.statement.executeQuery(query);
+		ResultSet result = JDBC.statement.executeQuery(query);
 	}
 	
 	public static void deleteTransactions() throws SQLException {

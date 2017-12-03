@@ -129,7 +129,7 @@ public class User {
 								tableType, name, username, password, address, state, phoneNumber, email, taxID, ssn);
 		JDBC.statement.executeUpdate(query);
 		
-		MarketAccount.createAccount();
+		MarketAccount.createAccount(currentTaxID);
 	}
 	
 	private static ResultSet getUserFromTable(String username, String password, String tableType) throws SQLException {
