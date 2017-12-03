@@ -18,6 +18,7 @@ public class User {
 			return false;
 		}
 
+		// Check for available username.
 		String[] updatedLoginInfo = checkUserExists(username, password, tableName);
 		username = updatedLoginInfo[0];
 		password = updatedLoginInfo[1];

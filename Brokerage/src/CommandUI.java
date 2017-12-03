@@ -192,7 +192,7 @@ public class CommandUI {
 				}
 				else if (action.equals("buy")) {
 					double numShares = Double.parseDouble(arguments[0]);
-					String stockSymbol = arguments[1].toUpperCase();						// TODO: toUpperCase() or toLowerCase() for all stockSymbol
+					String stockSymbol = arguments[1].toUpperCase();
 					Trader.buy(User.currentTaxID, numShares, stockSymbol);
 				}
 				else if (action.equals("sell")) {

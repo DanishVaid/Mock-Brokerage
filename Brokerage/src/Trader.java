@@ -55,7 +55,7 @@ public class Trader extends User {
 		System.out.println(transactionHistory);
 	}
 
-	public static void showStockPrice(String stockSymbol) {
+	public static void showStockPrice(String stockSymbol) throws SQLException {
 		double stockPrice = Stock.getStockPrice(stockSymbol);
 		
 		System.out.println(String.format("The current price of %s is %d.", stockSymbol, stockPrice));

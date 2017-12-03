@@ -40,12 +40,14 @@ public class JDBC {
 	}
 	
 	public static void setCredentials() {
+		// Find directory of credentials.json.
 		File directory = new File(System.getProperty("user.dir"));
 	    directory = directory.getParentFile();
 	    directory = directory.getParentFile();
 	    File file = new File(directory,"credentials.json");
 		String credentialsJSON = getCredentialJSON(file);
 		
+		// Parse JSON for credential fields
 		try {
 			JSONObject credentials = new JSONObject(credentialsJSON);
 			host = credentials.getString("HOST");
@@ -67,6 +69,7 @@ public class JDBC {
 		try {
 			bufferedReader = new BufferedReader(new FileReader(file));
 
+			// Read in CSIL DB credentials into JSON format.
 			String line = "";
 			while ((line = bufferedReader.readLine()) != null) {
 				JSONContent += line + "\n";
