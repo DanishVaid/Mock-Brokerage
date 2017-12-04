@@ -1,5 +1,6 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MarketAccount {
 
@@ -37,18 +38,44 @@ public class MarketAccount {
 		}
 	}
 	
-	// TODO: Do.
-	public static void accrueInterestOnAllAccounts(double interestRate) {
-		// Initial thought: manager calls this function when they run add interest
-	
+	public static void accrueInterestOnAllAccounts(double interestRate) throws SQLException {
+		ResultSet sql_tax_ids = JDBC.statement.executeQuery("SELECT tax_id FROM market_accounts");
+		ArrayList<Integer> tax_ids = new ArrayList<Integer>();
+		while(sql_tax_ids.next()){
+			tax_ids.add(sql_tax_ids.getInt("tax_id"));
+		}
+
+		String query = "";
+		ResultSet sql_avg_daily_balance;
+		double avg_daily_balance;
+		double interest;
+		double new_balance;
+		for(int tax_id : tax_ids){
+			// get AVG daily balance
+			query = String.format("SELECT AVG(balance) FROM daily_balances WHERE tax_id = %d AND month = %d;", tax_id, CommandUI.currentDate.getMonth());
+			sql_avg_daily_balance = (JDBC.statement.executeQuery(query));
+			sql_avg_daily_balance.first();
+			avg_daily_balance = sql_avg_daily_balance.getDouble(1);
+
+			// Calculate interest and update balance
+			interest = avg_daily_balance * interestRate;
+			query = String.format("UPDATE market_accounts SET balance = balance + %.2f WHERE tax_id = %d;", interest, tax_id);
+			JDBC.statement.executeUpdate(query);
+
+			// Add to transactions table
+			Transactions.addInterestRecord(tax_id, interest);
+		}
 	}
 	
 	public static boolean buy(double amount) throws SQLException {
-		return withdraw(amount);
+		System.out.println("$20 Commission added to buy request, if successful.");
+		return withdraw(amount + 20);
+
 	}
 	
 	public static boolean sell(double amount) throws SQLException {
-		return deposit(amount);
+		System.out.println("$20 Commission added to sell request, if successful.");
+		return deposit(amount - 20);
 	}
 
 	public static double getBalance() throws SQLException {

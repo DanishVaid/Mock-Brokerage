@@ -5,9 +5,8 @@ import java.sql.SQLException;
 public class StockAccount {
 	
 	public static boolean buy(double numShares, String stockSymbol) throws SQLException{
-		// TODO: Figure out how to buy
-		String insert_part = "INSERT INTO stock_accounts (tax_id, stock_sym, num_shares, date, type, price)";
-		String values_part = String.format("VALUES (%d, '%s', %.3f, '%s', 'buy', %.2f)", User.currentTaxID, stockSymbol, numShares, CommandUI.currentDate.toString(), Stock.getStockPrice(stockSymbol));
+		String insert_part = "INSERT INTO stock_accounts (tax_id, stock_sym, num_shares, date, type, price, earnings)";
+		String values_part = String.format("VALUES (%d, '%s', %.3f, '%s', 'buy', %.2f, 0.0", User.currentTaxID, stockSymbol, numShares, CommandUI.currentDate.toString(), Stock.getStockPrice(stockSymbol));
 
 		String query = insert_part + " " + values_part + ";";
 		JDBC.statement.executeUpdate(query);
@@ -15,7 +14,6 @@ public class StockAccount {
 	}
 	
 	public static boolean sell(double numShares, String stockSymbol, double buyPrice) throws SQLException{
-		// TODO: Figure out how to sell
 		String query = String.format("SELECT SUM(num_shares) FROM stock_accounts WHERE tax_id = %d AND stock_sym = '%s' AND price = %.2f;", User.currentTaxID, stockSymbol, buyPrice);
 		ResultSet result = JDBC.statement.executeQuery(query);
 

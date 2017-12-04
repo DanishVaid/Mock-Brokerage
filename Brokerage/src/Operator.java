@@ -55,7 +55,7 @@ public class Operator {
 	/*** PRIVATE METHODS ***/
 
 	private static void generateTables() throws SQLException {
-		String[] tables = new String[8];
+		String[] tables = new String[9];
 		tables[0] = "CREATE TABLE customer_profiles ( "
 				+ "name CHAR(30) NOT NULL, "
 				+ "username CHAR(30) NOT NULL, "
@@ -85,7 +85,9 @@ public class Operator {
 				+ "txn_id INT UNSIGNED NOT NULL AUTO_INCREMENT, "
 				+ "tax_id INT UNSIGNED NOT NULL, "
 				+ "date CHAR(30) NOT NULL, "
+				+ "month INT UNSIGNED NOT NULL, "
 				+ "txn_type CHAR(30) NOT NULL, "
+				+ "txn_details CHAR(200) NOT NULL, "
 				+ "PRIMARY KEY(txn_id), "
 				+ "FOREIGN KEY(tax_id) REFERENCES customer_profiles(tax_id), "
 				+ "CHECK(txn_type='deposit' OR txn_type='withdraw' OR txn_type='buy' OR txn_type='sell' OR txn_type='interest') "
@@ -98,7 +100,7 @@ public class Operator {
 				+ "date CHAR(20) NOT NULL, "
 				+ "type CHAR(10) NOT NULL, "
 				+ "price DECIMAL(10, 2) NOT NULL,"
-				+ "earnings DECIMAL(10, 2),"
+				+ "earnings DECIMAL(10, 2) NOT NULL,"
 				+ "PRIMARY KEY(stock_acc_id), "
 				+ "FOREIGN KEY(tax_id) REFERENCES customer_profiles(tax_id), "
 				+ "FOREIGN KEY(stock_sym) REFERENCES actor_stocks(stock_sym), "	// May not need this foreign key.
@@ -133,6 +135,16 @@ public class Operator {
 				+ "ssn CHAR(11) NOT NULL, "
 				+ "PRIMARY KEY(tax_id) "
 				+ ");";
+		tables[8] = "CREATE TABLE daily_balances ("
+				+ "b_id INT UNSIGNED NOT NULL AUTO_INCREMENT, "
+				+ "tax_id INT UNSIGNED NOT NULL, "
+				+ "balance DECIMAL(10, 2) NOT NULL, "
+				+ "date CHAR(20) NOT NULL, "
+				+ "month INT UNSIGNED NOT NULL, "
+				+ "day INT UNSIGNED NOT NULL, "
+				+ "PRIMARY KEY(b_id), "
+				+ "FOREIGN KEY(tax_id) REFERENCES market_accounts(tax_id)"
+				+ ");";
 		
 		// Insert one and only one row into system_status.
 		String initSystemStatus = "INSERT INTO system_status "
@@ -150,6 +162,7 @@ public class Operator {
 
 	private static void deleteDB() throws SQLException {
 		String[] tableNames = {
+			"daily_balances",
 			"market_accounts",
 			"transactions",
 			"stock_accounts",

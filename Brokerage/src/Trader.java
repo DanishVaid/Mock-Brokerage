@@ -70,11 +70,19 @@ public class Trader extends User {
 	}
 
 	public static void showStockPrice(String stockSymbol) throws SQLException {
-		double stockPrice = Stock.getStockPrice(stockSymbol);
+		double stockPrice;
+		try{
+			stockPrice = Stock.getStockPrice(stockSymbol);
+		}
+		catch(IllegalArgumentException e) {
+			System.out.println("Stock Symbol not recognized");
+			return;
+		} 
 		
 		System.out.println(String.format("The current price of %s is $%.2f.", stockSymbol, stockPrice));
 	}
-	
+
+	// TODO:
 	public static void showMovieInfo(String movieInquiry) throws SQLException {
 		String movieInfo = Movie.getMovieInfo(movieInquiry);
 			
@@ -97,7 +105,7 @@ public class Trader extends User {
 	}
 
 	public static void showOwningStocks() throws SQLException {
-		// TO DO if desired: show net stocks owned
+		// TODO: if desired: show net stocks owned
 	}
 
 }

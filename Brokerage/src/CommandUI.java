@@ -8,14 +8,14 @@ public class CommandUI {
 	public static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		String userType = getUserType();
-		String[] loginInfo = (!userType.equals("operator")) ? getLoginInfo() : null;
-		
 		try{
 			JDBC.setup();
-			Operator.resetDB();
+			// Operator.resetDB();
 			Operator.setSystem();
 			// int x = 1 / 0;
+
+			String userType = getUserType();
+			String[] loginInfo = (!userType.equals("operator")) ? getLoginInfo() : null;
 
 			// Manager commands and actions.
 			if (userType.equals("manager")) {
@@ -169,7 +169,7 @@ public class CommandUI {
 			System.out.println(String.format("%-28s %-20s %s", "Deposit:", "deposit", "<amount>"));
 			System.out.println(String.format("%-28s %-20s %s", "Withdraw:", "withdraw", "<amount>"));
 			System.out.println(String.format("%-28s %-20s %s", "Buy:", "buy", "<number of shares> <stock symbol>"));
-			System.out.println(String.format("%-28s %-20s %s", "Sell:", "sell", "<number of shares> <stock symbol>"));
+			System.out.println(String.format("%-28s %-20s %s", "Sell:", "sell", "<number of shares> <stock symbol> <buy price>"));
 			System.out.println(String.format("%-28s %-20s", "Show Balance:", "balance"));
 			System.out.println(String.format("%-28s %-20s", "Transaction History:", "transaction_history"));
 			System.out.println(String.format("%-28s %-20s %s", "Stock Price:", "stock_price", "<stock symbol>"));

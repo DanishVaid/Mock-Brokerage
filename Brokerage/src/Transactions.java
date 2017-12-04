@@ -1,34 +1,102 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.activation.CommandInfo;
+
 public class Transactions {
 
-	public static String getTransactionHistory() throws SQLException {
-		
-	}
-
-	public static String generateMonthlyStatement(int taxID) {
-		// TODO Auto-generated method stub
-		// TODO: SQL query, given customer, generate list of all transactions in month
-		// Should include name and email address of the customer
-		// Also include initial and final balance, total earning/loss, total amount of commissions paid
+	public static ResultSet getTransactionHistory() throws SQLException {
 		
 		return null;
 	}
 
-	public static String showTransactionHistory() {
-		String transactionHistory = "";
+	public static String generateMonthlyStatement(int taxID) throws SQLException {
+		// TODO: Test
+		String monthlyStatement;
+
+		// Getting name and email
+		String query = String.format("SELECT name, email FROM customer_profiles WHERE tax_id = %d;", taxID);
+		ResultSet result = JDBC.statement.executeQuery(query);
+		result.first();
+		monthlyStatement = String.format("Customer Name: %s\nCustomer Email: %s\nTransaction History:\n", result.getString("name"), result.getString("email"));
+
+		// Getting TXN history
+		monthlyStatement += Transactions.showTransactionHistory(taxID);
+
+		String sub_query;
+		// Getting initial account balance
+		sub_query = String.format("SELECT MIN(day) FROM daily_balances WHERE month = %d AND tax_id = %d", CommandUI.currentDate.getMonth(), taxID);
+		query = String.format("SELECT balance FROM daily_balances WHERE month = %d AND day = (%s) AND tax_id = %d", CommandUI.currentDate.getMonth(), sub_query, taxID);
+		result = JDBC.statement.executeQuery(query);
+		result.first();
+		double initialBalance = result.getDouble("balance");
+		monthlyStatement += String.format("Initial Balance: $%.2f\n", initialBalance);
+
+		// Getting final account balance
+		sub_query = String.format("SELECT MAX(day) FROM daily_balances WHERE month = %d AND tax_id = %d", CommandUI.currentDate.getMonth(), taxID);
+		query = String.format("SELECT balance FROM daily_balances WHERE month = %d AND day = (%s) AND tax_id = %d", CommandUI.currentDate.getMonth(), sub_query, taxID);
+		result = JDBC.statement.executeQuery(query);
+		result.first();
+		double finalBalance = result.getDouble("balance");
+		monthlyStatement += String.format("Final Balance: $%.2f\n", finalBalance);
+
+		// Earnings/Losses
+		monthlyStatement += String.format("Total Earnings (thus far): $%.2f\n", (finalBalance - initialBalance));
+		
+
+		// Total commissions paid
+		query = String.format("SELECT COUNT(*) FROM transactions WHERE tax_id = %d AND month = %d AND(txn_type = 'buy' OR txn_type = 'sell');", taxID, CommandUI.currentDate.getMonth());
+		result = JDBC.statement.executeQuery(query);
+		result.first();
+		double commissions = 20.00 * result.getInt(1);  // FIXME: this might fuck up
+		monthlyStatement += String.format("Total Commission Paid This Month: $%.2f\n", commissions);
+
+		return monthlyStatement;
+	}
+
+	public static String showTransactionHistory() throws SQLException {
+		String transactionHistory = String.format("%5s %-8s %-10s %-10s %s\n", "", "Tax ID", "Date", "Type", "Details");
 		
 		String query = String.format("SELECT * FROM transactions WHERE tax_id = %d", User.currentTaxID);
 		ResultSet result = JDBC.statement.executeQuery(query);
-		
+
 		while (result.next()) {
-			// TODO: Get attributes.
-			
-			// TOOD: Store attributes into transactionHistory string.
-			
+			String attributes = String.format("%5s %-8d %-10s %-10s %s\n", "", result.getInt("tax_id"), result.getString("date"), result.getString("txn_type"), result.getString("txn_details"));
+			transactionHistory += attributes;
 		}
 		return transactionHistory;
+	}
+
+
+	public static String showTransactionHistory(int tax_id) throws SQLException {
+		String transactionHistory = String.format("%5s %-8s %-10s %-10s %s\n", "", "Tax ID", "Date", "Type", "Details");
+		
+		String query = String.format("SELECT * FROM transactions WHERE tax_id = %d", tax_id);
+		ResultSet result = JDBC.statement.executeQuery(query);
+
+		while (result.next()) {
+			String attributes = String.format("%5s %-8d %-10s %-10s %s\n", "", result.getInt("tax_id"), result.getString("date"), result.getString("txn_type"), result.getString("txn_details"));
+			transactionHistory += attributes;
+		}
+		return transactionHistory;
+	}
+
+	public static boolean addInterestRecord(int tax_id, double interest) throws SQLException {
+		String notes = String.format("Interest Amount Given: %.2f", interest);
+		String query = String.format("INSERT INTO transactions(tax_id, date, month, txn_type, txn_details) VALUES (%d, '%s', %d, 'interest', '%s');", tax_id, CommandUI.currentDate.toString(), CommandUI.currentDate.getMonth(), notes);
+
+		if ((JDBC.statement.executeUpdate(query)) == 1){
+			return true;
+		}
+		return false;
+	}
+
+	public static double getInterestGiven(int tax_id) throws SQLException {
+		String query = String.format("SELECT txn_details FROM transactions WHERE tax_id = %d AND month = %d", tax_id, CommandUI.currentDate.getMonth());
+		ResultSet results = JDBC.statement.executeQuery(query);
+		results.first();
+		String[] detail_sections = results.getString("txn_details").split(" ");
+		return Double.parseDouble(detail_sections[detail_sections.length - 1]);
 	}
 
 	// Transaction history of all users
