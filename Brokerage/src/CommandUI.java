@@ -109,7 +109,7 @@ public class CommandUI {
 	private static void takeCommandAsManager() throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
-			System.out.println("---COMMANDS---");
+			System.out.println(String.format("%25s --- COMMANDS--- ", " "));
 			System.out.println(String.format("%-28s %-20s %s", "Add Interest:", "add_interest", "<interest rate>"));
 			System.out.println(String.format("%-28s %-20s %s", "Generate Monthly Statement:", "monthly_statement", "<customer taxID>"));
 			System.out.println(String.format("%-28s %-20s", "List Active Customers:", "active_customers"));
@@ -117,6 +117,7 @@ public class CommandUI {
 			System.out.println(String.format("%-28s %-20s %s", "Customer Report:", "customer_report", "<customer taxID>"));
 			System.out.println(String.format("%-28s %-20s", "Delete Transactions", "delete_transactions"));
 			System.out.println(String.format("%-28s %-20s", "Exit System:", "exit"));
+			System.out.print("\nEnter Command: ");
 			
 			String[] command = input.nextLine().toLowerCase().split(" ");
 			String action = command[0];
@@ -164,7 +165,7 @@ public class CommandUI {
 	private static void takeCommandAsTrader() throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
-			System.out.println("---COMMANDS---");
+			System.out.println(String.format("%25s --- COMMANDS--- ", " "));
 			System.out.println(String.format("%-28s %-20s %s", "Deposit:", "deposit", "<amount>"));
 			System.out.println(String.format("%-28s %-20s %s", "Withdraw:", "withdraw", "<amount>"));
 			System.out.println(String.format("%-28s %-20s %s", "Buy:", "buy", "<number of shares> <stock symbol>"));
@@ -176,6 +177,7 @@ public class CommandUI {
 			System.out.println(String.format("%-28s %-20s %s", "Top Movies:", "top_movies", "<begin year> <end year>"));
 			System.out.println(String.format("%-28s %-20s %s", "Movie Reviews:", "movie_reviews", "<movie name>"));
 			System.out.println(String.format("%-28s %-20s", "Exit System:", "exit"));
+			System.out.print("\nEnter Command: ");
 			
 			String[] command = input.nextLine().toLowerCase().split(" ");
 			String action = command[0];
@@ -244,12 +246,13 @@ public class CommandUI {
 	private static void takeCommandAsOperator() throws SQLException {
 		while (true) {
 			System.out.println("What would you like to do?");
-			System.out.println("---COMMANDS---");
+			System.out.println(String.format("%25s --- COMMANDS--- ", " "));
 			System.out.println(String.format("%-28s %-20s", "Open Market:", "open_market"));
 			System.out.println(String.format("%-28s %-20s", "Close Market:", "close_market"));
 			System.out.println(String.format("%-28s %-20s %s", "Set Stock Price:", "set_stock_price", "<stock symbol> <price>"));
 			System.out.println(String.format("%-28s %-20s %s", "Set Date:", "set_date", "<month> <day> <year>"));
 			System.out.println(String.format("%-28s %-20s", "Exit System:", "exit"));
+			System.out.print("\nEnter Command: ");
 			
 			String[] command = input.nextLine().toLowerCase().split(" ");
 			String action = command[0];

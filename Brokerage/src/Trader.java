@@ -59,7 +59,7 @@ public class Trader extends User {
 	public static void showBalance() throws SQLException {
 		double balance = MarketAccount.getBalance();
 		
-		System.out.println(String.format("Your current balance is: %f", balance));
+		System.out.println(String.format("Your current balance is: %.2f", balance));
 	}
 	
 	public static void showTransactionHistory() throws SQLException {
@@ -72,7 +72,7 @@ public class Trader extends User {
 	public static void showStockPrice(String stockSymbol) throws SQLException {
 		double stockPrice = Stock.getStockPrice(stockSymbol);
 		
-		System.out.println(String.format("The current price of %s is %d.", stockSymbol, stockPrice));
+		System.out.println(String.format("The current price of %s is $%.2f.", stockSymbol, stockPrice));
 	}
 	
 	public static void showMovieInfo(String movieInquiry) throws SQLException {
