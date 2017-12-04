@@ -4,6 +4,19 @@ import java.sql.SQLException;
 public class Transactions {
 
 	public static String getTransactionHistory() throws SQLException {
+		
+	}
+
+	public static String generateMonthlyStatement(int taxID) {
+		// TODO Auto-generated method stub
+		// TODO: SQL query, given customer, generate list of all transactions in month
+		// Should include name and email address of the customer
+		// Also include initial and final balance, total earning/loss, total amount of commissions paid
+		
+		return null;
+	}
+
+	public static String showTransactionHistory() {
 		String transactionHistory = "";
 		
 		String query = String.format("SELECT * FROM transactions WHERE tax_id = %d", User.currentTaxID);
@@ -16,15 +29,6 @@ public class Transactions {
 			
 		}
 		return transactionHistory;
-	}
-
-	public static String generateMonthlyStatement(int taxID) {
-		// TODO Auto-generated method stub
-		// TODO: SQL query, given customer, generate list of all transactions in month
-		// Should include name and email address of the customer
-		// Also include initial and final balance, total earning/loss, total amount of commissions paid
-		
-		return null;
 	}
 
 	// Transaction history of all users

@@ -63,7 +63,7 @@ public class Trader extends User {
 	}
 	
 	public static void showTransactionHistory() throws SQLException {
-		String transactionHistory = Transactions.getTransactionHistory();
+		String transactionHistory = Transactions.showTransactionHistory();
 		
 		System.out.println("Here are your previous transactions: ");
 		System.out.println(transactionHistory);
