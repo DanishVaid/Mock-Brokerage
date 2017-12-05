@@ -32,7 +32,7 @@ public class JDBC {
 		connection = DriverManager.getConnection(host, username, password);
 		statement = connection.createStatement();
 		movieConnection = DriverManager.getConnection(hostMovie, username, password);
-		movieStatement = connection.createStatement();
+		movieStatement = movieConnection.createStatement();
 	}
 	
 	public static void endSession() throws SQLException {

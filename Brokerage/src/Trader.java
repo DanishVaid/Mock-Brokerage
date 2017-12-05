@@ -122,7 +122,7 @@ public class Trader extends User {
 	}
 
 	public static void showMovieInfo(String[] movieNamePieces) throws SQLException {
-		String movieName = String.join(",", movieNamePieces);
+		String movieName = String.join(" ", movieNamePieces);
 		String movieInfo = Movie.getMovieInfo(movieName);
 			
 		System.out.println("Here is the information for the given movie:");
@@ -136,8 +136,8 @@ public class Trader extends User {
 		System.out.println(topMovies);
 	}
 
-	public static void showMovieReviews(String[] movieNamPiecese) throws SQLException {
-		String movieName = String.join(",", movieNamePieces);
+	public static void showMovieReviews(String[] movieNamePieces) throws SQLException {
+		String movieName = String.join(" ", movieNamePieces);
 		String movieReviews = Movie.getMovieReviews(movieName);
 		
 		System.out.println("Here are the reviews of the given movie: ");
