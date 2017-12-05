@@ -11,6 +11,7 @@ public class CommandUI {
 		try{
 			JDBC.setup();
 			// Operator.resetDB();
+			//TODO: Send in system info when change applied
 			Operator.setSystem();
 			// int x = 1 / 0;
 
@@ -266,7 +267,7 @@ public class CommandUI {
 					Operator.closeMarket();
 				}
 				else if (action.equals("set_stock_price")) {
-					String stockSymbol = arguments[0];
+					String stockSymbol = arguments[0].toUpperCase();
 					double price = Double.parseDouble(arguments[1]);
 					Operator.setStockPrice(stockSymbol, price);
 				}

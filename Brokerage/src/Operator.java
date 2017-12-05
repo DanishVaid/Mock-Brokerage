@@ -32,19 +32,29 @@ public class Operator {
 	}
 	
 	// TODO: Do.
-	public static void openMarket() {
-		
+	public static void openMarket() throws SQLException {
+		if(!canTrade){
+			canTrade = true;
+			recordOpenMarket();
+			System.out.println("Market Opened.\n");
+		}
+		else {
+			System.out.println("Market Already Open.\n");
+		}
 	}
 	
 	// TODO: Do.
-	public static void closeMarket() {
-		
+	public static void closeMarket() throws SQLException {
+		canTrade = false;
+		recordCloseMarket();
+		MarketAccount.recordAllDailyBalances();
+		System.out.println("Market Closed.\n");
 	}
 	
 	public static void setStockPrice(String stockSymbol, double newPrice) throws SQLException {
 		Stock.setStockPrice(stockSymbol, newPrice);
-		
-		System.out.println(String.format("Successfully set price of %s to $%d", stockSymbol, newPrice));
+		// Put print statements in setStockPrice funtion
+		// System.out.println(String.format("Successfully set price of %s to $%d", stockSymbol, newPrice));
 	}
 	
 	// TODO: Do.
@@ -251,6 +261,22 @@ public class Operator {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private static void recordOpenMarket() throws SQLException{
+		String query = "UPDATE system_status SET market_open = 1;";
+		JDBC.statement.executeUpdate(query);
+	}
+
+	public static void recordCloseMarket() throws SQLException {
+		String query = "UPDATE system_status SET market_open = 0;";
+		JDBC.statement.executeUpdate(query);
+	}
+
+	//TODO: Add to date change
+	public static void recordCurrentDate(Date currDate) throws SQLException {
+		String query = String.format("UPDATE system_status SET date = '%s';", currDate.toString());
+		JDBC.statement.executeUpdate(query);
 	}
 	
 }

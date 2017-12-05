@@ -6,17 +6,22 @@ public class Trader extends User {
 	
 	public static void deposit(double amount) throws SQLException {
 		MarketAccount.deposit(amount);
-		
+		Transactions.addDepositRecord(amount);
 		System.out.println(String.format("Successfully deposited $%.2f.", amount));
 	}
 	
 	public static void withdraw(double amount) throws SQLException {
 		MarketAccount.withdraw(amount);
-		
+		Transactions.addWithdrawRecord(amount);
 		System.out.println(String.format("Successfully withdrew $%.2f.", amount));
 	}
 	
 	public static void buy(double numShares, String stockSymbol) throws SQLException {
+		if(!Operator.canTrade){
+			System.out.println("You may not trade: the market is currently closed\n");
+			return;
+		}
+
 		double stockPrice;
 		try {
 			stockPrice = Stock.getStockPrice(stockSymbol);
@@ -31,12 +36,18 @@ public class Trader extends User {
 		if (MarketAccount.buy(value)){
 			StockAccount.buy(numShares, stockSymbol);
 			System.out.println(String.format("Successfully purchased %.3f '%s' shares for $%.2f.", numShares, stockSymbol, value));
+			Transactions.addBuyRecord(stockSymbol, stockPrice, numShares);
 			return;
 		}
 		System.out.println(String.format("Failure to purchase %d shares of '%s'.", numShares, stockSymbol));
 	}
 	
 	public static void sell(double numShares, String stockSymbol, double buyPrice) throws SQLException {
+		if(!Operator.canTrade){
+			System.out.println("You may not trade: the market is currently closed\n");
+			return;
+		}
+
 		double stockPrice;
 		try {
 			stockPrice = Stock.getStockPrice(stockSymbol);
@@ -51,6 +62,8 @@ public class Trader extends User {
 		if(StockAccount.sell(numShares, stockSymbol, buyPrice)) {
 			MarketAccount.sell(value);
 			System.out.println(String.format("Successfully sold %.3f '%s' shares for $%.2f.", numShares, stockSymbol, value));
+			// addSellRecord(String stockSym, double currentStockPrice, double stockBoughtAt, double numOfShares)
+			Transactions.addSellRecord(stockSymbol, buyPrice, numShares);
 			return;
 		}
 		System.out.println(String.format("Failure to sell %.3f shares of '%s' bought at %.2f.", numShares, stockSymbol, buyPrice));
@@ -106,6 +119,7 @@ public class Trader extends User {
 
 	public static void showOwningStocks() throws SQLException {
 		// TODO: if desired: show net stocks owned
+
 	}
 
 }

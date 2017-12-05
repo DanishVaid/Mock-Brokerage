@@ -99,8 +99,40 @@ public class Transactions {
 		return Double.parseDouble(detail_sections[detail_sections.length - 1]);
 	}
 
-	// Transaction history of all users
-	// Should identify a transaction with date, accounts involved, stock symbol, number of shares, and price
-	// Does not need to keep track of failed transactions
+	//TODO: Ensure its added to all deposit calls
+	public static boolean addDepositRecord(double amount) throws SQLException {
+		String note = String.format("Deposited $%.2f to account.", amount);
+		return insertRecord(note, "deposit");
+	}
+
+	//TODO: Ensure its added to all withdraw calls
+	public static boolean addWithdrawRecord(double amount) throws SQLException {
+		String note = String.format("Withdrew $%.2f from account.", amount);
+		return insertRecord(note, "withdraw");
+	}
+
+	//TODO: Ensure its added to all buy command
+	public static boolean addBuyRecord(String stockSym, double stockPrice, double numOfShares) throws SQLException {
+		String note = String.format("Bought %.3f of %s @ $%.2f per share (+$20 Commission)", numOfShares, stockSym, stockPrice);
+		return insertRecord(note, "buy");
+	}
+
+	//TODO: Ensure its added to all sell command
+	public static boolean addSellRecord(String stockSym, double stockBoughtAt, double numOfShares) throws SQLException {
+		double currentStockPrice = Stock.getStockPrice(stockSym);
+		String note = String.format("Sold %.3f of %s @ $%.2f per share (bought @ $%.2f per share (+$20 Commission)", numOfShares, stockSym, currentStockPrice, stockBoughtAt);
+		return insertRecord(note, "sell");
+	}
+	
+
+	// Private Methods
+	private static boolean insertRecord(String note, String type) throws SQLException {
+		String query = String.format("INSERT INTO transactions (tax_id, date, month, txn_type, txn_details) VALUES (%d, '%s', %d, '%s', '%s');", User.currentTaxID, CommandUI.currentDate.toString(), CommandUI.currentDate.getMonth(), type, note);
+		if ((JDBC.statement.executeUpdate(query)) == 1){
+			return true;
+		}
+		return false;
+	}
+
 	
 }

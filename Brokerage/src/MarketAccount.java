@@ -93,4 +93,31 @@ public class MarketAccount {
 		result.first();
 		return result.getDouble("balance");
 	}
+
+	public static void recordAllDailyBalances() throws SQLException {
+		String query = "SELECT * FROM market_accounts";
+		ResultSet result = JDBC.statement.executeQuery(query);
+
+		String baseQuery = "INSERT INTO daily_balances (tax_id, balance, date, month, day) ";
+		String valueQuery;
+		ArrayList<String> recordingQueries = new ArrayList<String>();
+		Date currentDate = CommandUI.currentDate;
+		int success = 0;
+
+		while(result.next()){
+			valueQuery = String.format("VALUES (%d, %.2f, '%s', %d, %d);\n", result.getInt("tax_id"), result.getDouble("balance"), currentDate.toString(), currentDate.getMonth(), currentDate.getDay());
+			recordingQueries.add(baseQuery + valueQuery);
+		}
+
+		for(String curr_record : recordingQueries) {
+			success = JDBC.statement.executeUpdate(curr_record);
+		}
+
+		if(success > 0){
+			System.out.println(String.format("Daily balances recorded for: %s\n", currentDate.toString()));
+		}
+		else {
+			System.out.println(String.format("No market accounts found to record daily balance on: %s\n", currentDate.toString()));
+		}
+	}
 }

@@ -12,9 +12,10 @@ public class Manager extends User {
 	}
 	
 	public static void generateMonthlyStatement(int taxID) throws SQLException {
+		System.out.println("------------------ Monthly Report for Customer Start -------------------");
 		String monthlyStatement = Transactions.generateMonthlyStatement(taxID);
-		System.out.println("------------------------ Monthly Report -------------------------");
 		System.out.println(monthlyStatement);
+		System.out.println("---------------- Monthly Report for Customer Completed -----------------");
 	}
 	
 	public static void listActiveCustomers() throws SQLException {
@@ -70,16 +71,36 @@ public class Manager extends User {
 	}
 	
 	public static void generateCustomerReport(int customerTaxID) throws SQLException {
-		// TODO: SQL query, generate a list of all accounts associated with a customer
-		// Include the current balance
-		String query = "";
+		// TODO: Test
+		System.out.println("\n------------------------ CUSTOMER REPORT INFORMATION -------------------------");
+		String query = String.format("SELECT tax_id, name, email, balance FROM customer_profiles NATURAL JOIN market_accounts WHERE tax_id = %d;", customerTaxID);
 		ResultSet result = JDBC.statement.executeQuery(query);
+		if(result.first()){
+			System.out.println(String.format("Customer Tax ID: %d", customerTaxID));
+			System.out.println(String.format("Customer Contact: %s, %s", result.getString("name"), result.getString("email")));
+			System.out.println(String.format("Market Account Balance: $%.2f", result.getDouble("balance")));
+			System.out.println("Customer Stock Accounts:");
+			System.out.println(String.format("%5s %-8s %-7s %-10s %s", "", "Tax ID", "STOCK", "Shares", "Earnings (till date)"));
+			
+			query = String.format("SELECT tax_id, stock_sym, SUM(num_shares) AS shares, SUM(earnings) AS earnings FROM stock_accounts WHERE tax_id = %d GROUP BY tax_id, stock_sym;", customerTaxID);
+			result = JDBC.statement.executeQuery(query);
+			while(result.next()){
+				System.out.println(String.format("%5s %-8d %-7s %-10.3f %.2f", "", result.getInt("tax_id"), result.getString("stock_sym"), result.getDouble("shares"), result.getDouble("earnings")));
+			}
+		}
+		else {
+			System.out.println("No such customer found.");
+		}
+		
+
+		System.out.println("------------------------ CUSTOMER REPORT COMPLETED -------------------------\n");
 	}
 	
 	public static void deleteTransactions() throws SQLException {
-		// TODO: SQL query, delete list of transactions from each of the accounts
-		String query = "";
+		// TODO: Test
+		String query = "DELETE FROM transactions";
 		JDBC.statement.executeUpdate(query);
+		System.out.println("Stored transactions deleted.\n");
 	}
 
 }

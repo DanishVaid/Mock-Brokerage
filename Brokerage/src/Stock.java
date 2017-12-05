@@ -25,8 +25,14 @@ public class Stock {
 	}
 
 	public static void setStockPrice(String stockSymbol, double newPrice) throws SQLException {
-		String query = String.format("UPDATE ...", stockSymbol, newPrice);	// TODO: Finish query.
+		// TODO: Test
+		String query = String.format("UPDATE actor_stocks SET current_price = %.2f WHERE stock_sym = '%s';", newPrice, stockSymbol);
 		
-		JDBC.statement.executeUpdate(query);
+		if(JDBC.statement.executeUpdate(query) > 0){
+			System.out.println(String.format("Stock %s price updated to: $%.2f", stockSymbol, newPrice));
+		}
+		else {
+			System.out.println("No stock with that symbol found");
+		}
 	}
 }
