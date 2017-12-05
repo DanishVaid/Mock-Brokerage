@@ -49,7 +49,6 @@ public class MarketAccount {
 		ResultSet sql_avg_daily_balance;
 		double avg_daily_balance;
 		double interest;
-		double new_balance;
 		for(int tax_id : tax_ids){
 			// get AVG daily balance
 			query = String.format("SELECT AVG(balance) FROM daily_balances WHERE tax_id = %d AND month = %d;", tax_id, CommandUI.currentDate.getMonth());
@@ -110,7 +109,7 @@ public class MarketAccount {
 		}
 
 		for(String curr_record : recordingQueries) {
-			success = JDBC.statement.executeUpdate(curr_record);
+			success += JDBC.statement.executeUpdate(curr_record);
 		}
 
 		if(success > 0){

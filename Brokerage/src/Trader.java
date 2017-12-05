@@ -19,7 +19,7 @@ public class Trader extends User {
 	
 	public static void buy(double numShares, String stockSymbol) throws SQLException {
 		if(!Operator.canTrade){
-			System.out.println("You may not trade: the market is currently closed\n");
+			System.out.println("You may not trade, the market is currently closed.");
 			return;
 		}
 
@@ -36,16 +36,17 @@ public class Trader extends User {
 		
 		if (MarketAccount.buy(value)){
 			StockAccount.buy(numShares, stockSymbol);
-			System.out.println(String.format("Successfully purchased %.3f '%s' shares for $%.2f.", numShares, stockSymbol, value));
 			Transactions.addBuyRecord(stockSymbol, stockPrice, numShares);
+			System.out.println(String.format("Successfully purchased %.3f '%s' shares for $%.2f.", numShares, stockSymbol, value));
 			return;
 		}
+		
 		System.out.println(String.format("Failure to purchase %d shares of '%s'.", numShares, stockSymbol));
 	}
 	
 	public static void sell(double numShares, String stockSymbol, double buyPrice) throws SQLException {
 		if(!Operator.canTrade){
-			System.out.println("You may not trade: the market is currently closed\n");
+			System.out.println("You may not trade, the market is currently closed.");
 			return;
 		}
 
@@ -96,6 +97,7 @@ public class Trader extends User {
 		System.out.println(String.format("The current price of %s is $%.2f.", stockSymbol, stockPrice));
 	}
 
+	// TODO: If not lazy, move query to Stock.java.
 	public static void showActorProfile(String stockSymbol) throws SQLException {
 		String query = String.format("SELECT * FROM actor_stocks LEFT JOIN contracts ON actor_stocks.stock_sym = contracts.stock_sym WHERE actor_stocks.stock_sym = '%s';", stockSymbol);
 		ResultSet result = JDBC.statement.executeQuery(query);
@@ -144,7 +146,7 @@ public class Trader extends User {
 		System.out.println(movieReviews);
 	}
 
-	public static void showOwningStocks() throws SQLException {
+	public static void showOwnedStocks() throws SQLException {
 		// TODO: if desired: show net stocks owned
 
 	}

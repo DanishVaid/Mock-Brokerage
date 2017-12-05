@@ -71,7 +71,6 @@ public class Manager extends User {
 	}
 	
 	public static void generateCustomerReport(int customerTaxID) throws SQLException {
-		// TODO: Test
 		System.out.println("\n------------------------ CUSTOMER REPORT INFORMATION -------------------------");
 		String query = String.format("SELECT tax_id, name, email, balance FROM customer_profiles NATURAL JOIN market_accounts WHERE tax_id = %d;", customerTaxID);
 		ResultSet result = JDBC.statement.executeQuery(query);
@@ -97,7 +96,6 @@ public class Manager extends User {
 	}
 	
 	public static void deleteTransactions() throws SQLException {
-		// TODO: Test
 		String query = "DELETE FROM transactions";
 		JDBC.statement.executeUpdate(query);
 		System.out.println("Stored transactions deleted.\n");

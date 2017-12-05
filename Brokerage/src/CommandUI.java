@@ -10,10 +10,8 @@ public class CommandUI {
 	public static void main(String[] args) {
 		try{
 			JDBC.setup();
-			// Operator.resetDB();
-			//TODO: Send in system info when change applied
+//			Operator.resetDB();	// Uncomment when we want a clean slate of our DB.
 			Operator.setSystem();
-			// int x = 1 / 0;
 
 			String userType = getUserType();
 			String[] loginInfo = (!userType.equals("operator")) ? getLoginInfo() : null;
@@ -21,7 +19,7 @@ public class CommandUI {
 			// Manager commands and actions.
 			if (userType.equals("manager")) {
 				if(!signIn(loginInfo, 'm')){
-					System.out.println("--- System Error Logging in");
+					System.out.println("--- System Error Logging in ---");
 					throw new Exception();
 				}
 				System.out.println("Logged in successfully.");
@@ -30,7 +28,7 @@ public class CommandUI {
 			// Trader commands and actions.
 			else if (userType.equals("trader")) {
 				if(!signIn(loginInfo, 't')){
-					System.out.println("--- System Error Logging in");
+					System.out.println("--- System Error Logging in ---");
 					throw new Exception();
 				}
 				System.out.println("Logged in successfully.");

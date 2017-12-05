@@ -45,7 +45,9 @@ public class JDBC {
 		}
 	}
 	
-	public static void setCredentials() {
+	/*** PRIVATE METHODS ***/
+	
+	private static void setCredentials() {
 		// Find directory of credentials.json.
 		File directory = new File(System.getProperty("user.dir"));
 	    directory = directory.getParentFile();
@@ -66,8 +68,6 @@ public class JDBC {
 			e.printStackTrace();
 		}
 	}
-	
-	/*** PRIVATE METHODS ***/
 	
 	private static String getCredentialJSON(File file) {
 		String JSONContent = "";

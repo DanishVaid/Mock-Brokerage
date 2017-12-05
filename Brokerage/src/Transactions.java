@@ -11,8 +11,7 @@ public class Transactions {
 	}
 
 	public static String generateMonthlyStatement(int taxID) throws SQLException {
-		// TODO: Test
-		String monthlyStatement;
+		String monthlyStatement = "";
 
 		// Getting name and email
 		String query = String.format("SELECT name, email FROM customer_profiles WHERE tax_id = %d;", taxID);
@@ -123,14 +122,16 @@ public class Transactions {
 		String note = String.format("Sold %.3f of %s @ $%.2f per share (bought @ $%.2f per share (+$20 Commission)", numOfShares, stockSym, currentStockPrice, stockBoughtAt);
 		return insertRecord(note, "sell");
 	}
-	
 
-	// Private Methods
+	/*** PRIVATE METHODS ***/
+	
 	private static boolean insertRecord(String note, String type) throws SQLException {
 		String query = String.format("INSERT INTO transactions (tax_id, date, month, txn_type, txn_details) VALUES (%d, '%s', %d, '%s', '%s');", User.currentTaxID, CommandUI.currentDate.toString(), CommandUI.currentDate.getMonth(), type, note);
+		
 		if ((JDBC.statement.executeUpdate(query)) == 1){
 			return true;
 		}
+		
 		return false;
 	}
 

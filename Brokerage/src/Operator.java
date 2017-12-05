@@ -48,13 +48,12 @@ public class Operator {
 		recordCloseMarket();
 		MarketAccount.recordAllDailyBalances();
 		CommandUI.currentDate.addDays(1);
+		recordCurrentDate(CommandUI.currentDate);
 		System.out.println("Market Closed.\n");
 	}
 	
 	public static void setStockPrice(String stockSymbol, double newPrice) throws SQLException {
 		Stock.setStockPrice(stockSymbol, newPrice);
-		// Put print statements in setStockPrice funtion
-		// System.out.println(String.format("Successfully set price of %s to $%d", stockSymbol, newPrice));
 	}
 	
 	public static void setDate(int month, int day, int year) throws SQLException {
