@@ -220,7 +220,7 @@ public class CommandUI {
 					Trader.showActorProfile(stockSymbol);
 				}
 				else if (action.equals("movie_info")) {
-					String movieName = arguments[0];
+					String[] movieName = arguments;
 					Trader.showMovieInfo(movieName);
 				}
 				else if (action.equals("top_movies")) {
@@ -229,7 +229,7 @@ public class CommandUI {
 					Trader.showTopMovies(beginYear, endYear);
 				}
 				else if (action.equals("movie_reviews")) {
-					String movieName = arguments[0];
+					String[] movieName = arguments;
 					Trader.showMovieReviews(movieName);
 				}
 				else if (action.equals("exit")) {

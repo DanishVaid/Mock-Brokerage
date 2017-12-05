@@ -58,8 +58,18 @@ public class Operator {
 	}
 	
 	// TODO: Do.
-	public static void setDate(int month, int day, int year) {
+	public static void setDate(int month, int day, int year) throws SQLException {
+		Date desiredDate = new Date(month, day, year);
+		int differenceOfDays = CommandUI.currentDate.getDifference(desiredDate);
 		
+		boolean tempCanTrade = canTrade;
+		for (int i = 0; i < differenceOfDays; i++) {
+			closeMarket();
+		}
+		
+		if (tempCanTrade) {
+			openMarket();
+		}
 	}
 
 	/*** PRIVATE METHODS ***/

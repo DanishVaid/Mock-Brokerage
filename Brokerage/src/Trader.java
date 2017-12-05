@@ -121,9 +121,9 @@ public class Trader extends User {
 		System.out.println("------------------ Actor Profile Completed -------------------");
 	}
 
-	// TODO:
-	public static void showMovieInfo(String movieInquiry) throws SQLException {
-		String movieInfo = Movie.getMovieInfo(movieInquiry);
+	public static void showMovieInfo(String[] movieNamePieces) throws SQLException {
+		String movieName = String.join(",", movieNamePieces);
+		String movieInfo = Movie.getMovieInfo(movieName);
 			
 		System.out.println("Here is the information for the given movie:");
 		System.out.println(movieInfo);
@@ -136,7 +136,8 @@ public class Trader extends User {
 		System.out.println(topMovies);
 	}
 
-	public static void showMovieReviews(String movieName) throws SQLException {
+	public static void showMovieReviews(String[] movieNamPiecese) throws SQLException {
+		String movieName = String.join(",", movieNamePieces);
 		String movieReviews = Movie.getMovieReviews(movieName);
 		
 		System.out.println("Here are the reviews of the given movie: ");
