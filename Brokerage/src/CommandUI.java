@@ -174,6 +174,7 @@ public class CommandUI {
 			System.out.println(String.format("%-28s %-20s", "Show Balance:", "balance"));
 			System.out.println(String.format("%-28s %-20s", "Transaction History:", "transaction_history"));
 			System.out.println(String.format("%-28s %-20s %s", "Stock Price:", "stock_price", "<stock symbol>"));
+			System.out.println(String.format("%-28s %-20s %s", "Actor Profile:", "actor_profile", "<stock symbol>"));
 			System.out.println(String.format("%-28s %-20s %s", "Movie Info:", "movie_info", "<movie name>"));
 			System.out.println(String.format("%-28s %-20s %s", "Top Movies:", "top_movies", "<begin year> <end year>"));
 			System.out.println(String.format("%-28s %-20s %s", "Movie Reviews:", "movie_reviews", "<movie name>"));
@@ -211,8 +212,12 @@ public class CommandUI {
 					Trader.showTransactionHistory();
 				}
 				else if (action.equals("stock_price")) {
-					String stockSymbol = arguments[0];
+					String stockSymbol = arguments[0].toUpperCase();
 					Trader.showStockPrice(stockSymbol);
+				}
+				else if (action.equals("actor_profile")) {
+					String stockSymbol = arguments[0].toUpperCase();
+					Trader.showActorProfile(stockSymbol);
 				}
 				else if (action.equals("movie_info")) {
 					String movieName = arguments[0];

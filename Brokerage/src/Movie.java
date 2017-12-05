@@ -6,8 +6,8 @@ public class Movie {
 	public static String getMovieInfo(String movieName) throws SQLException {
 		String movieInfo = "";
 		
-		String query = String.format("SELECT * FROM movies WHERE name = %s", movieName);
-		ResultSet result = JDBC.statement.executeQuery(query);
+		String query = String.format("SELECT * FROM Movies WHERE name = '%s'", movieName);
+		ResultSet result = JDBC.movieStatement.executeQuery(query);
 		result.first();
 		
 		// TODO: Get attributes and store into movieInfo string.

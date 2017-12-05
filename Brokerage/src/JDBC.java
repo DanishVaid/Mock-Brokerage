@@ -13,11 +13,15 @@ import org.json.JSONObject;
 public class JDBC {
 
 	private static String host;
+	private static String hostMovie;
 	private static String username;
 	private static String password;
 	
 	public static Connection connection;
 	public static Statement statement;
+
+	public static Connection movieConnection;
+	public static Statement movieStatement;
 	
 	
 	public static void setup() throws ClassNotFoundException, SQLException {
@@ -27,6 +31,8 @@ public class JDBC {
 		
 		connection = DriverManager.getConnection(host, username, password);
 		statement = connection.createStatement();
+		movieConnection = DriverManager.getConnection(hostMovie, username, password);
+		movieStatement = connection.createStatement();
 	}
 	
 	public static void endSession() throws SQLException {
@@ -51,6 +57,7 @@ public class JDBC {
 		try {
 			JSONObject credentials = new JSONObject(credentialsJSON);
 			host = credentials.getString("HOST");
+			hostMovie = credentials.getString("HOST_MOVIE");
 			username = credentials.getString("USER");
 			password = credentials.getString("PASS");
 		}

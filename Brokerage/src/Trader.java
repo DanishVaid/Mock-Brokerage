@@ -1,3 +1,4 @@
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Trader extends User {
@@ -93,6 +94,31 @@ public class Trader extends User {
 		} 
 		
 		System.out.println(String.format("The current price of %s is $%.2f.", stockSymbol, stockPrice));
+	}
+
+	public static void showActorProfile(String stockSymbol) throws SQLException {
+		String query = String.format("SELECT * FROM actor_stocks LEFT JOIN contracts ON actor_stocks.stock_sym = contracts.stock_sym WHERE actor_stocks.stock_sym = '%s';", stockSymbol);
+		ResultSet result = JDBC.statement.executeQuery(query);
+		System.out.println("------------------ Actor Profile Summary -------------------");
+
+		if(result.first()){
+			System.out.println(String.format("%-7s %-15s %-25s %s", "Stock", "Name", "DoB", "Current Stock Price"));
+			System.out.println(String.format("%-7s %-15s %-25s %.2f", result.getString("stock_sym"), result.getString("actor_name") , result.getString("dob"), result.getDouble("current_price")));
+			System.out.println("Contract(s) Information:");
+			System.out.println(String.format("%-5s %-25s %-8s %-8s %s", "", "Movie Title", "Role", "Year", "Value"));
+		}
+		else {
+			System.out.println("No actor with that stock symbol");
+			return;
+		}
+
+		do {
+			if(result.getString("movie_title") != null){
+				System.out.println(String.format("%-5s %-25s %-8s %-8d %.2f", "", result.getString("movie_title"), result.getString("role"), result.getInt("year"), result.getDouble("value")));
+			}
+		} while(result.next());
+
+		System.out.println("------------------ Actor Profile Completed -------------------");
 	}
 
 	// TODO:
