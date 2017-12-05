@@ -89,18 +89,18 @@ public class Date {
 		}
 	}
 	
-	public boolean isPassedDate(Date d) {
-		if (year > d.getYear()) {
+	public boolean isPassedDate(Date date) {
+		if (year > date.getYear()) {
 			return true;
 		}
 		
-		if (year == d.getYear()) {
-			if (month > d.getMonth()) {
+		if (year == date.getYear()) {
+			if (month > date.getMonth()) {
 				return true;
 			}
 			
-			if (month == d.getMonth()) {
-				if (day > d.getDay()) {
+			if (month == date.getMonth()) {
+				if (day > date.getDay()) {
 					return true;
 				}
 				else {
@@ -119,6 +119,46 @@ public class Date {
 	public static Date buildFromString(String inp) {
 		String[] date_data = inp.split("/");
 		return new Date(Integer.parseInt(date_data[0]), Integer.parseInt(date_data[1]), Integer.parseInt(date_data[2]));
+	}
+	
+	public int getDifference(Date newDate) {
+		int numDays = 0;
+		if (newDate.getYear() == year && newDate.getMonth() == month) {
+			numDays = newDate.getDay() - day;
+			return numDays;
+		}
+		else if (newDate.getYear() == year) {
+			for (int i = month; i < newDate.getMonth(); i++) {
+				numDays += daysInMonth(i);
+			}
+			
+			numDays -= day;
+			numDays += newDate.getDay();
+		}
+		else {
+			System.out.println("System does not support differences in years.");
+		}
+		
+		return 0;
+	}
+	
+	private int daysInMonth(int month) {
+		int numDays = 0;
+		
+		if (monthsEndIn28.contains(month)) {
+			numDays = 28;
+		}
+		else if (monthsEndIn30.contains(month)) {
+			numDays = 30;
+		}
+		else if (monthsEndIn31.contains(month)) {
+			numDays = 31;
+		}
+		else {
+			System.out.println("Wrong month format.");
+		}
+		
+		return numDays;
 	}
 	
 	public int[] getDateInt() {
