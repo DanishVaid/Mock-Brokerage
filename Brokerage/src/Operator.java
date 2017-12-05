@@ -31,7 +31,6 @@ public class Operator {
 		}
 	}
 	
-	// TODO: Do.
 	public static void openMarket() throws SQLException {
 		if(!canTrade){
 			canTrade = true;
@@ -43,11 +42,12 @@ public class Operator {
 		}
 	}
 	
-	// TODO: Do.
+	// Signifies the end of a day.
 	public static void closeMarket() throws SQLException {
 		canTrade = false;
 		recordCloseMarket();
 		MarketAccount.recordAllDailyBalances();
+		CommandUI.currentDate.addDays(1);
 		System.out.println("Market Closed.\n");
 	}
 	
@@ -57,7 +57,6 @@ public class Operator {
 		// System.out.println(String.format("Successfully set price of %s to $%d", stockSymbol, newPrice));
 	}
 	
-	// TODO: Do.
 	public static void setDate(int month, int day, int year) throws SQLException {
 		Date desiredDate = new Date(month, day, year);
 		int differenceOfDays = CommandUI.currentDate.getDifference(desiredDate);
@@ -65,11 +64,16 @@ public class Operator {
 		boolean tempCanTrade = canTrade;
 		for (int i = 0; i < differenceOfDays; i++) {
 			closeMarket();
+			openMarket();
 		}
 		
 		if (tempCanTrade) {
 			openMarket();
 		}
+		else {
+			closeMarket();
+		}
+		
 	}
 
 	/*** PRIVATE METHODS ***/
