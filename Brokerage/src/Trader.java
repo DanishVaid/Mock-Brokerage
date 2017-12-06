@@ -12,9 +12,11 @@ public class Trader extends User {
 	}
 	
 	public static void withdraw(double amount) throws SQLException {
-		MarketAccount.withdraw(amount);
-		Transactions.addWithdrawRecord(amount);
-		System.out.println(String.format("Successfully withdrew $%.2f.", amount));
+		if(MarketAccount.withdraw(amount)){
+			Transactions.addWithdrawRecord(amount);
+			System.out.println(String.format("Successfully withdrew $%.2f.", amount));
+		}
+		
 	}
 	
 	public static void buy(double numShares, String stockSymbol) throws SQLException {
@@ -41,7 +43,7 @@ public class Trader extends User {
 			return;
 		}
 		
-		System.out.println(String.format("Failure to purchase %d shares of '%s'.", numShares, stockSymbol));
+		System.out.println(String.format("Failure to purchase %.3f shares of '%s'.", numShares, stockSymbol));
 	}
 	
 	public static void sell(double numShares, String stockSymbol, double buyPrice) throws SQLException {
@@ -74,7 +76,7 @@ public class Trader extends User {
 	public static void showBalance() throws SQLException {
 		double balance = MarketAccount.getBalance();
 		
-		System.out.println(String.format("Your current balance is: %.2f", balance));
+		System.out.println(String.format("Your current balance is: $%.2f", balance));
 	}
 	
 	public static void showTransactionHistory() throws SQLException {

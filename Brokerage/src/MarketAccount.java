@@ -15,7 +15,7 @@ public class MarketAccount {
 		JDBC.statement.executeUpdate(query);
 		
 		double newBalance = getBalance();
-		System.out.println("New account balance is: " + newBalance);
+		System.out.println("New account balance is: $" + newBalance);
 		return true;
 	}
 	
@@ -29,11 +29,11 @@ public class MarketAccount {
 			JDBC.statement.executeUpdate(query);
 			
 			newBalance = getBalance();
-			System.out.println(String.format("New balance is: %.2f", newBalance));
+			System.out.println(String.format("New balance is: $%.2f", newBalance));
 			return true;
 		}
 		else {
-			System.out.println(String.format("Insufficient funds, account currently has: %.2f", originalBalance));
+			System.out.println(String.format("Insufficient funds, account currently has: $%.2f", originalBalance));
 			return false;
 		}
 	}

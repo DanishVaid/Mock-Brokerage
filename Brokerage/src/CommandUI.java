@@ -10,7 +10,7 @@ public class CommandUI {
 	public static void main(String[] args) {
 		try{
 			JDBC.setup();
-//			Operator.resetDB();	// Uncomment when we want a clean slate of our DB.
+			// Operator.resetDB();	// Uncomment when we want a clean slate of our DB.
 			Operator.setSystem();
 
 			String userType = getUserType();

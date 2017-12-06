@@ -19,7 +19,7 @@ public class Movie {
 		do {
 			movieInfo += String.format("%-5s %-50s %-8d %s\n", "", result.getString("title"), result.getInt("production_year"), result.getDouble("rating"));
 		} while(result.next());
-		movieInfo += "------------------------- Movie Information End -----------------------\n";
+		movieInfo += "------------------------ Movie Information End ----------------------\n";
 		return movieInfo;
 	}
 
