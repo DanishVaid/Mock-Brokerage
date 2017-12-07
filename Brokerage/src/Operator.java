@@ -223,6 +223,8 @@ public class Operator {
 			populateDataFromFile(dataFile, tableName);
 		}
 
+		initializeDailyBalances();
+
 		System.out.println("--- All Data Imported ---");
 	}
 
@@ -274,6 +276,29 @@ public class Operator {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private static void initializeDailyBalances() throws SQLException {
+		String query = "SELECT * FROM market_accounts";
+		ResultSet result = JDBC.statement.executeQuery(query);
+
+		String baseQuery = "INSERT INTO daily_balances (tax_id, balance, date, month, day) ";
+		String valueQuery;
+		ArrayList<String> recordingQueries = new ArrayList<String>();
+
+		for(int i = 1; i < 16; i++){
+			result.first();
+			do {
+				valueQuery = String.format("VALUES (%d, %.2f, '3/%s/2013', %d, %d);\n", result.getInt("tax_id"), result.getDouble("balance"), Integer.toString(i), 3, i);
+				recordingQueries.add(baseQuery + valueQuery);
+			} while(result.next());
+		}
+
+		for(String curr_record : recordingQueries) {
+			JDBC.statement.executeUpdate(curr_record);
+		}
+
+		System.out.println("Daily Balances Populated");
 	}
 
 	private static void recordOpenMarket() throws SQLException{
