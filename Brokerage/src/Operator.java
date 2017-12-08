@@ -69,9 +69,6 @@ public class Operator {
 		if (tempCanTrade) {
 			openMarket();
 		}
-		else {
-			closeMarket();
-		}
 		
 	}
 

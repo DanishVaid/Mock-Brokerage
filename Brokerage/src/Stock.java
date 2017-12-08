@@ -18,7 +18,7 @@ public class Stock {
 		
 		ResultSet result = JDBC.statement.executeQuery(query);
 		if(result.next()){
-			return result.getInt("current_price");
+			return result.getDouble("current_price");
 		}
 
 		throw new IllegalArgumentException();
